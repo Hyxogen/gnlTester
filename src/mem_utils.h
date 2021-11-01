@@ -19,7 +19,7 @@ void free_tracked(void *pointer);
 
 void ClearLeakCheck();
 
-t_bool HasLeaks();
+int HasLeaks();
 
 t_bool BlockEqual(const void *blk1, const void *blk2);
 
