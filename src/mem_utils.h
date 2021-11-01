@@ -13,9 +13,9 @@ typedef struct S_BlockInfo {
 	size_t m_Size;
 } BlockInfo;
 
-void *malloc_internal(size_t size);
+void *malloc_tracked(size_t size);
 
-void free_internal(void *pointer);
+void free_tracked(void *pointer);
 
 void ClearLeakCheck();
 

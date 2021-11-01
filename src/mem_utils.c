@@ -22,7 +22,7 @@ static LinkedList *g_Allocated = NULL;
 //}
 
 //TODO rename these functions to something like malloc_tracked
-void *malloc_internal(size_t size) {
+void *malloc_tracked(size_t size) {
 	void *ret;
 	LinkedList *element;
 
@@ -35,7 +35,7 @@ void *malloc_internal(size_t size) {
 	return ret;
 }
 
-void free_internal(void *pointer) {
+void free_tracked(void *pointer) {
 	RemoveElements(&g_Allocated, &BlockEqual, pointer);
 	free(pointer);
 }

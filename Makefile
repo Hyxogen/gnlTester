@@ -45,7 +45,7 @@ $(OBJS): $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) -c $< -o $@ -D BUFFER_SIZE=$(BUF_SIZE)
 
 $(GNL_OBJS): $(OBJ_DIR)/%.o: $(GNL_DIR)/%.c
-	$(CC) -c $< -o $@ -DBUFFER_SIZE=$(BUF_SIZE) -D'malloc(x)=malloc_internal(x)' -D'free(x)=free_internal(x)'
+	$(CC) -c $< -o $@ -DBUFFER_SIZE=$(BUF_SIZE) -D'malloc(x)=malloc_tracked(x)' -D'free(x)=free_tracked(x)'
 
 clean:
 	rm -f $(OBJS) $(GNL_OBJS)
