@@ -18,7 +18,6 @@ void AddBack(LinkedList **list, LinkedList *element);
 
 void RemoveElements(LinkedList **list, t_bool (*equal)(const void *, const void *), const void *sample);
 
-//void RemoveElements(LinkedList **list, t_bool (*equal)(void*, void*), void *sample);
 size_t GetSize(const LinkedList *list);
 
 void ClearList(LinkedList **list);
