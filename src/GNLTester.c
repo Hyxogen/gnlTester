@@ -15,7 +15,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "../include/tester.h"
-#include "Checker.h"
 #include "../../get_next_line.h"
 #include "TestUtils.h"
 #include "MemUtils.h"
@@ -32,12 +31,12 @@ int main(int argc, char **argv) {
 		printf("Incorrect arguments. Usage: ./gnlTster [file]\n");
 		return (-1);
 	} else if (argc == 2) {
-//		if (!test_file(argv[1]))
-//			ret |= 0b0000001;
-//		if (HasLeaks())
-//			ret |= 0b0000010;
+		if (!TestFileNormal(argv[1]))
+			ret |= 0b0000001;
+		if (HasLeaks())
+			ret |= 0b0000010;
 		ClearLeakCheck();
-		if (!test_malloc_fail(argv[1]))
+		if (!TestFileFail(argv[1]))
 			ret |= 0b0000100;
 		//TODO check for memory leaks if malloc fails in between
 		if (!ret)

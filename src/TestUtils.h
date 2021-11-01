@@ -7,7 +7,7 @@
 
 #include "../include/tester.h"
 
-t_bool test_file(const char *file);
-t_bool test_malloc_fail(const char *file);
+t_bool TestFileNormal(const char *file);
+t_bool TestFileFail(const char *file);
 
 #endif //GNLTESTER_TEST_UTILS_H

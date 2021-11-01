@@ -3,84 +3,95 @@
 //
 
 #include "TestUtils.h"
-#include "Checker.h"
-#include "MemUtils.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>
+#include <string.h>
+#include <unistd.h>
 #include "Assert.h"
+#include "MemUtils.h"
 
-static t_bool test_file_internal(int test_fd, FILE *stream) {
-	char *test_ret;
-	char *corr_ret;
+static t_bool FileForEachLine(FILE *stream, int fd, t_bool (*check)(int, const char *)) {
+	char *corr_str;
 	size_t line_cap;
-	ssize_t getline_ret;
+	ssize_t ret;
 
-	test_ret = NULL;
-	corr_ret = NULL;
-	line_cap = 0;
+	corr_str = NULL;
 	while (1) {
-		test_ret = get_next_line(test_fd);
-		getline_ret = getline(&corr_ret, &line_cap, stream);
-		if ((getline_ret == -1) && !test_ret)
-			return (TRUE);
-		else if (getline_ret == -1)
-			return (FALSE);
-		else if (!check_string(test_ret, corr_ret)) {
-			printf("Expected:\n\"%s\"\nGot:\n\"%s\"\n", corr_ret, test_ret);
-			free_tracked(test_ret);
-			free(corr_ret);
+		ret = getline(&corr_str, &line_cap, stream);
+		if (ret == -1)
+			return (check(fd, NULL));
+		else if (!check(fd, corr_str)) {
+			free(corr_str);
 			return (FALSE);
 		}
-		if (!test_ret)
-			break;
-		free_tracked(test_ret);
 	}
 	return (TRUE);
 }
 
-static t_bool test_file_internal_malloc(int test_fd, FILE *stream, int n) {
-	char *test_ret;
-	char *corr_ret;
-	size_t line_cap;
-	ssize_t getline_ret;
+/**
+ * Checks if the next line of get_next_line equals corrNextStr
+ *
+ * @param fd
+ * @param corrNextStr
+ * @return TRUE if check passed
+ */
+static t_bool CheckNormal(int fd, const char *corrNextStr) {
+	char *testNextStr;
+	t_bool equal;
 
-	test_ret = NULL;
-	corr_ret = NULL;
-	line_cap = 0;
-	while (1) {
-		SetMallocFaiL(n);
-		test_ret = get_next_line(test_fd);
-		getline_ret = getline(&corr_ret, &line_cap, stream);
-		free_tracked(test_ret);
-		if (HasLeaks()) {
-			printf("Code leaks if malloc fails! %d\n", HasLeaks());
-			return (FALSE);
-		}
-		if (getline_ret == -1)
-			return (TRUE);
-		if (!test_ret)
-			break;
-	}
-	return (TRUE);
+	testNextStr = get_next_line(fd);
+	if (corrNextStr == NULL)
+		return (testNextStr == NULL);
+	equal = !strcmp(testNextStr, corrNextStr);
+	FreeTracked(testNextStr);
+	return (equal);
 }
 
-t_bool test_file(const char *file) {
+/**
+ * Checks if the next call of get_next_line with a malloc failure
+ * has no leaks, and if the return value is correct
+ *
+ * @param fd
+ * @param corrNextStr
+ * @return TRUE if check passed
+ */
+static t_bool CheckFail(int fd, const char *corrNextStr) {
+	char *testNextStr;
+
+	SetMallocFaiL(1);
+	testNextStr = get_next_line(fd);
+	if (corrNextStr)
+		;
+	if (testNextStr != NULL)
+		return (FALSE);
+	return (!HasLeaks());
+}
+
+t_bool TestFileNormal(const char *file) {
 	int test_fd;
 	FILE *stream;
+	t_bool ret;
 
 	test_fd = open(file, O_RDONLY);
 	stream = fopen(file, "r");
 	ASSERT((test_fd != -1) && (stream != NULL));
-	return (test_file_internal(test_fd, stream));
+	ret = FileForEachLine(stream, test_fd, &CheckNormal);
+	fclose(stream);
+	close(test_fd);
+	return (ret);
 }
 
-t_bool test_malloc_fail(const char *file) {
+t_bool TestFileFail(const char *file) {
 	int test_fd;
 	FILE *stream;
+	t_bool ret;
 
 	test_fd = open(file, O_RDONLY);
 	stream = fopen(file, "r");
 	ASSERT((test_fd != -1) && (stream != NULL));
-	return (test_file_internal_malloc(test_fd, stream, 1));
+	ret = FileForEachLine(stream, test_fd, &CheckFail);
+	fclose(stream);
+	close(test_fd);
+	return (ret);
 }
