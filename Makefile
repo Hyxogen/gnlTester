@@ -16,7 +16,7 @@ OBJ_DIR				:= ./obj
 SRC_DIR				:= ./src
 INC_DIR				:= ./include
 
-SRCS				:= $(SRC_DIR)/tester.c $(SRC_DIR)/checker.c $(SRC_DIR)/test_utils.c
+SRCS				:= $(SRC_DIR)/tester.c $(SRC_DIR)/checker.c $(SRC_DIR)/test_utils.c $(SRC_DIR)/mem_utils.c
 OBJS				:= $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 DEPENDENCIES		:= $(INC_DIR)/tester.h
 
@@ -27,9 +27,11 @@ GNL_OBJS			:= $(GNL_SRCS:$(GNL_DIR)/%.c=$(OBJ_DIR)/%.o)
 
 #TESTER_OBJ			:= $(TESTER_SRC:.c=.o)
 #GNL_OBJ				:= $(GNL_SRC:.c=.o)
-CFLAGS				:= -Wall -Wextra -Werror
+CFLAGS				:= -Wall -Wextra -Werror -g
 CC					:= gcc $(CFLAGS)
 LD					:= gcc
+
+BUF_SIZE			:= 128
 
 all: $(NAME)
 
@@ -37,13 +39,13 @@ test: all
 	./$(NAME) ./tests/simple
 
 $(NAME): $(DEPENDENCIES) $(OBJS) $(GNL_DEPENDENCIES) $(GNL_OBJS)
-	$(LD) $(OBJS) $(GNL_OBJS) -o $(NAME)
+	$(LD) $(OBJS) $(GNL_OBJS) -o $(NAME) -D BUFFER_SIZE=$(BUF_SIZE)
 
 $(OBJS): $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
-	$(CC) -c $< -o $@
+	$(CC) -c $< -o $@ -D BUFFER_SIZE=$(BUF_SIZE)
 
 $(GNL_OBJS): $(OBJ_DIR)/%.o: $(GNL_DIR)/%.c
-	$(CC) -c $< -o $@
+	$(CC) -c $< -o $@ -DBUFFER_SIZE=$(BUF_SIZE) -D'malloc(x)=malloc_internal(x)' -D'free(x)=free_internal(x)'
 
 clean:
 	rm -f $(OBJS) $(GNL_OBJS)

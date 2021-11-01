@@ -4,6 +4,7 @@
 
 #include "test_utils.h"
 #include "checker.h"
+#include "mem_utils.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>
@@ -26,13 +27,13 @@ static t_bool test_file_internal(int test_fd, FILE *stream) {
 		else if (getline_ret == -1)
 			return (FALSE);
 		else if (!check_string(test_ret, corr_ret)) {
-			free(test_ret);
+			free_internal(test_ret);
 			free(corr_ret);
 			return (FALSE);
 		}
 		if (!test_ret)
 			break;
-		free(test_ret);
+		free_internal(test_ret);
 	}
 	return (TRUE);
 }

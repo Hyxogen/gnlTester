@@ -4,12 +4,18 @@
 
 #ifndef GNLTESTER_MEM_UTILS_H
 #define GNLTESTER_MEM_UTILS_H
-
 #include <wchar.h>
-#include "../include/tester.h"
+#include <dlfcn.h>
 
-void malloc(size_t size);
-t_bool hasLeaks();
-void clearLeakCheck();
+typedef struct S_BlockInfo {
+    void* m_Pointer;
+    size_t m_Size;
+} BlockInfo;
+
+void* malloc_internal(size_t size);
+void free_internal(void* pointer);
+
+void ClearLeakCheck();
+int HasLeaks();
 
 #endif //GNLTESTER_MEM_UTILS_H
