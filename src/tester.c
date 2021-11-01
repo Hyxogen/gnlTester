@@ -32,10 +32,14 @@ int main(int argc, char **argv) {
 		printf("Incorrect arguments. Usage: ./gnlTster [file]\n");
 		return (-1);
 	} else if (argc == 2) {
-		if (!test_file(argv[1]))
-			ret |= 0b0000011;
-		if (HasLeaks())
-			ret |= 0b0000010;
+//		if (!test_file(argv[1]))
+//			ret |= 0b0000001;
+//		if (HasLeaks())
+//			ret |= 0b0000010;
+		ClearLeakCheck();
+		if (!test_malloc_fail(argv[1]))
+			ret |= 0b0000100;
+		//TODO check for memory leaks if malloc fails in between
 		if (!ret)
 			printf("Passed tests!\n");
 		else
