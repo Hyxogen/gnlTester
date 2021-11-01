@@ -99,3 +99,4 @@ modules.xml
 obj/
 *.o
 *.out
+gnlTester
