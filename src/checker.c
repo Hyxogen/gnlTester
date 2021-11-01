@@ -13,8 +13,7 @@
 #include "checker.h"
 #include <string.h>
 
-t_bool
-check_string(const char *str, const char *expected) {
+t_bool check_string(const char *str, const char *expected) {
 	if (!str)
 		return (!expected);
 	return (!strcmp(expected, str));
