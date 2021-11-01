@@ -12,7 +12,7 @@ static LinkedList *g_Allocated = NULL;
 static int g_MallocFail = -1;
 
 //TODO rename these functions to something like malloc_tracked
-void *malloc_tracked(size_t size) {
+void *MallocTracked(size_t size) {
 	void *ret;
 	LinkedList *element;
 	if (!g_MallocFail)
@@ -28,7 +28,7 @@ void *malloc_tracked(size_t size) {
 	return ret;
 }
 
-void free_tracked(void *pointer) {
+void FreeTracked(void *pointer) {
 	RemoveElements(&g_Allocated, &BlockEqual, pointer);
 	free(pointer);
 }
