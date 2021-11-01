@@ -18,21 +18,29 @@
 #include "checker.h"
 #include "../../get_next_line.h"
 #include "test_utils.h"
+#include "mem_utils.h"
 
 
 /*
  * No arguments will run tests for invalid fd
  */
 int main(int argc, char **argv) {
+    int ret;
+
+    ret = 0;
 	if (argc > 2) {
 		printf("Incorrect arguments. Usage: ./gnlTster [file]\n");
 		return (-1);
 	} else if (argc == 2) {
-		if (test_file(argv[1]))
-			printf("Passed tests!\n");
+	    if (!test_file(argv[1]))
+            ret |= 0b0000011;
+	    if (HasLeaks())
+	        ret |= 0b0000010;
+		if (!ret)
+		    printf("Passed tests!\n");
 		else
-			printf("Failed tests\n");
-		return (0);
+		    printf("Failed tests!\n");
+		return (ret);
 	}
-	return (0);
+	return (ret);
 }
