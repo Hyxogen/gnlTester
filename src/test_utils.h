@@ -8,5 +8,6 @@
 #include "../include/tester.h"
 
 t_bool test_file(const char *file);
+t_bool test_malloc_fail(const char *file);
 
 #endif //GNLTESTER_TEST_UTILS_H
