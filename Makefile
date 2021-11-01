@@ -30,11 +30,11 @@ CFLAGS				:= -Wall -Wextra -Werror $(MEMORY_CHECK)
 CC					:= gcc $(CFLAGS)
 LD					:= gcc $(MEMORY_CHECK)
 #TODO fix BUF_SIZE 1
-BUF_SIZE			:= 128
+BUF_SIZE			:= 1
 
 all: $(NAME)
 
-test: all
+test: re
 	./$(NAME) ./tests/simple
 
 $(NAME): $(DEPENDENCIES) $(OBJS) $(GNL_DEPENDENCIES) $(GNL_OBJS)

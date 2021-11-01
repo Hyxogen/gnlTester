@@ -41,9 +41,14 @@ static t_bool CheckNormal(int fd, const char *corrNextStr) {
 	t_bool equal;
 
 	testNextStr = get_next_line(fd);
+	printf("Expected:%s got:%s\n", corrNextStr, testNextStr);
 	if (corrNextStr == NULL)
 		return (testNextStr == NULL);
-	equal = !strcmp(testNextStr, corrNextStr);
+	if (!testNextStr) {
+		printf("Unexpected EOF!\n");
+		return (FALSE);
+	}
+	equal = !strcmp(testNextStr, corrNextStr); //CRASH HERE
 	FreeTracked(testNextStr);
 	return (equal);
 }

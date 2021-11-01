@@ -25,6 +25,7 @@ void *MallocTracked(size_t size) {
 	element = CreateElement(ret);
 	ASSERT(element);
 	AddBack(&g_Allocated, element);
+	printf("Alloc %zu bytes!\n", size);
 	return ret;
 }
 
