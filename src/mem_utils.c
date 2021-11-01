@@ -9,23 +9,16 @@
 
 
 static LinkedList *g_Allocated = NULL;
-
-//static BlockInfo *CreateBlockInfo(void *pointer, size_t size) {
-//    BlockInfo *ret;
-//
-//    ret = malloc(sizeof(BlockInfo));
-//    if (!ret)
-//        return (NULL);
-//    ret->m_Pointer = pointer;
-//    ret->m_Size = size;
-//    return (ret);
-//}
+static int g_MallocFail = -1;
 
 //TODO rename these functions to something like malloc_tracked
 void *malloc_tracked(size_t size) {
 	void *ret;
 	LinkedList *element;
-
+	if (!g_MallocFail)
+		return (NULL);
+	else if (g_MallocFail > 0)
+		g_MallocFail--;
 	ret = malloc(size);
 	if (!ret)
 		return (NULL);
@@ -54,4 +47,8 @@ t_bool BlockEqual(const void *blk1, const void *blk2) {
 	ptr1 = blk1;
 	ptr2 = blk2;
 	return (ptr1 == ptr2);
+}
+
+void SetMallocFaiL(int n) {
+	g_MallocFail = n;
 }

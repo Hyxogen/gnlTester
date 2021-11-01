@@ -23,4 +23,7 @@ int HasLeaks();
 
 t_bool BlockEqual(const void *blk1, const void *blk2);
 
+//Sets malloc to fail on the n'th time of using it. Set to -1 to never fail
+void SetMallocFaiL(int n);
+
 #endif //GNLTESTER_MEM_UTILS_H
