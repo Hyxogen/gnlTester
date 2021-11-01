@@ -44,6 +44,10 @@ t_bool HasLeaks() {
 	return (GetSize(g_Allocated));
 }
 
+void ClearLeakCheck() {
+	ClearList(&g_Allocated);
+}
+
 t_bool BlockEqual(const void *blk1, const void *blk2) {
 	const unsigned char *ptr1, *ptr2;
 
