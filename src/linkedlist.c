@@ -13,13 +13,14 @@ LinkedList *CreateElement(void *content) {
     if (!ret)
         return (NULL);
     ret->m_Content = content;
+    ret->m_Next = NULL;
     return (ret);
 }
 
 void AddBack(LinkedList **list, LinkedList *element) {
     if (!*list) {
         *list = element;
-        return element;
+        return;
     }
 
     LinkedList *temp;
@@ -36,7 +37,7 @@ void RemoveElements(LinkedList **list, t_bool (*func)(void *content)) {
     previous = NULL;
     current = *list;
     while (current) {
-        if (!func(current))
+        if (!func(current->m_Content))
             continue;
         if (previous) {
             previous->m_Next = current->m_Next;
