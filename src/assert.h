@@ -7,6 +7,5 @@
 
 #include <signal.h>
 
-//TODO test this
-#define Assert(x) if (!x) { raise(SIGTRAP); } else { }
+#define ASSERT(x) if (!x) { raise(SIGTRAP); } else { }
 #endif //TESTER_ASSERT_H

@@ -30,7 +30,7 @@ void *malloc_internal(size_t size) {
 	if (!ret)
 		return (NULL);
 	element = CreateElement(ret);
-	Assert(element);
+	ASSERT(element);
 	AddBack(&g_Allocated, element);
 	return ret;
 }
