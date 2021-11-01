@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "checker.h"
+#include "Checker.h"
 #include <string.h>
 
 t_bool check_string(const char *str, const char *expected) {

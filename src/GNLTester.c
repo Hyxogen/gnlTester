@@ -15,10 +15,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "../include/tester.h"
-#include "checker.h"
+#include "Checker.h"
 #include "../../get_next_line.h"
-#include "test_utils.h"
-#include "mem_utils.h"
+#include "TestUtils.h"
+#include "MemUtils.h"
 
 
 /*

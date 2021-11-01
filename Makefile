@@ -16,7 +16,7 @@ OBJ_DIR				:= ./obj
 SRC_DIR				:= ./src
 INC_DIR				:= ./include
 
-SRCS				:= $(SRC_DIR)/tester.c $(SRC_DIR)/checker.c $(SRC_DIR)/test_utils.c $(SRC_DIR)/mem_utils.c $(SRC_DIR)/linkedlist.c
+SRCS				:= $(SRC_DIR)/GNLTester.c $(SRC_DIR)/Checker.c $(SRC_DIR)/TestUtils.c $(SRC_DIR)/MemUtils.c $(SRC_DIR)/LinkedList.c
 OBJS				:= $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 DEPENDENCIES		:= $(INC_DIR)/tester.h
 

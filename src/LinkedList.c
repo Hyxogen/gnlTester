@@ -2,7 +2,7 @@
 // Created by Daan Meijer on 11/1/21.
 //
 
-#include "linkedlist.h"
+#include "LinkedList.h"
 #include <stdlib.h>
 #include "../include/tester.h"
 

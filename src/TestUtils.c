@@ -2,13 +2,13 @@
 // Created by Daan Meijer on 28/10/2021.
 //
 
-#include "test_utils.h"
-#include "checker.h"
-#include "mem_utils.h"
+#include "TestUtils.h"
+#include "Checker.h"
+#include "MemUtils.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>
-#include "assert.h"
+#include "Assert.h"
 
 static t_bool test_file_internal(int test_fd, FILE *stream) {
 	char *test_ret;

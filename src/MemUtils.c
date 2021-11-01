@@ -2,9 +2,9 @@
 // Created by Daan Meijer on 28/10/2021.
 //
 
-#include "mem_utils.h"
-#include "linkedlist.h"
-#include "assert.h"
+#include "MemUtils.h"
+#include "LinkedList.h"
+#include "Assert.h"
 #include <stdlib.h>
 
 

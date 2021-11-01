@@ -21,6 +21,7 @@ void ClearLeakCheck();
 
 int HasLeaks();
 
+//TODO rename to something more appropriate like pointer equal
 t_bool BlockEqual(const void *blk1, const void *blk2);
 
 //Sets malloc to fail on the n'th time of using it. Set to -1 to never fail
