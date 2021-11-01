@@ -11,10 +11,12 @@
 /* ************************************************************************** */
 
 #ifndef TESTER_H
-# define TESTER_H
+#define TESTER_H
+
+#include "../../get_next_line.h"
 
 typedef int t_bool;
-# define TRUE 1
-# define FALSE 0
+#define TRUE 1
+#define FALSE 0
 
 #endif

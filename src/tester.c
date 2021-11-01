@@ -17,6 +17,7 @@
 #include "../include/tester.h"
 #include "checker.h"
 #include "../../get_next_line.h"
+#include "test_utils.h"
 
 
 /*

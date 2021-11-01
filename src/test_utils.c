@@ -3,6 +3,11 @@
 //
 
 #include "test_utils.h"
+#include "checker.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <signal.h>
 
 static t_bool test_file_internal(int test_fd, FILE *stream) {
 	char *test_ret;
