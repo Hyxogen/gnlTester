@@ -25,11 +25,10 @@ GNL_SRCS			:= $(GNL_DIR)/get_next_line.c $(GNL_DIR)/get_next_line_utils.c
 GNL_DEPENDENCIES	:= $(GNL_DIR)/get_next_line.h
 GNL_OBJS			:= $(GNL_SRCS:$(GNL_DIR)/%.c=$(OBJ_DIR)/%.o)
 
-#TESTER_OBJ			:= $(TESTER_SRC:.c=.o)
-#GNL_OBJ				:= $(GNL_SRC:.c=.o)
-CFLAGS				:= -Wall -Wextra -Werror -g
+MEMORY_CHECK		:= -fsanitize=address
+CFLAGS				:= -Wall -Wextra -Werror $(MEMORY_CHECK)
 CC					:= gcc $(CFLAGS)
-LD					:= gcc
+LD					:= gcc $(MEMORY_CHECK)
 
 BUF_SIZE			:= 128
 
