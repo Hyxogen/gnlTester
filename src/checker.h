@@ -12,4 +12,4 @@
 
 #include "../include/tester.h"
 
-t_bool	check_string(const char *str, const char *expected);
+t_bool check_string(const char *str, const char *expected);

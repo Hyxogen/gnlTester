@@ -23,31 +23,31 @@ static LinkedList *g_Allocated = NULL;
 
 //TODO rename these functions to something like malloc_tracked
 void *malloc_internal(size_t size) {
-    void *ret;
-    LinkedList *element;
+	void *ret;
+	LinkedList *element;
 
-    ret = malloc(size);
-    if (!ret)
-        return (NULL);
-    element = CreateElement(ret);
-    Assert(element);
-    AddBack(&g_Allocated, element);
-    return ret;
+	ret = malloc(size);
+	if (!ret)
+		return (NULL);
+	element = CreateElement(ret);
+	Assert(element);
+	AddBack(&g_Allocated, element);
+	return ret;
 }
 
 void free_internal(void *pointer) {
-    RemoveElements(&g_Allocated, &BlockEqual, pointer);
-    free(pointer);
+	RemoveElements(&g_Allocated, &BlockEqual, pointer);
+	free(pointer);
 }
 
 t_bool HasLeaks() {
-    return (GetSize(g_Allocated));
+	return (GetSize(g_Allocated));
 }
 
 t_bool BlockEqual(const void *blk1, const void *blk2) {
-    const unsigned char *ptr1, *ptr2;
+	const unsigned char *ptr1, *ptr2;
 
-    ptr1 = blk1;
-    ptr2 = blk2;
-    return (ptr1 == ptr2);
+	ptr1 = blk1;
+	ptr2 = blk2;
+	return (ptr1 == ptr2);
 }

@@ -25,21 +25,21 @@
  * No arguments will run tests for invalid fd
  */
 int main(int argc, char **argv) {
-    int ret;
+	int ret;
 
-    ret = 0;
+	ret = 0;
 	if (argc > 2) {
 		printf("Incorrect arguments. Usage: ./gnlTster [file]\n");
 		return (-1);
 	} else if (argc == 2) {
-	    if (!test_file(argv[1]))
-            ret |= 0b0000011;
-	    if (HasLeaks())
-	        ret |= 0b0000010;
+		if (!test_file(argv[1]))
+			ret |= 0b0000011;
+		if (HasLeaks())
+			ret |= 0b0000010;
 		if (!ret)
-		    printf("Passed tests!\n");
+			printf("Passed tests!\n");
 		else
-		    printf("Failed tests!\n");
+			printf("Failed tests!\n");
 		return (ret);
 	}
 	return (ret);

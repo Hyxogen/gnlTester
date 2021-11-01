@@ -8,13 +8,16 @@
 #include "../include/tester.h"
 
 typedef struct S_LinkedList {
-    void *m_Content;
-    struct S_LinkedList* m_Next;
+	void *m_Content;
+	struct S_LinkedList *m_Next;
 } LinkedList;
 
-LinkedList* CreateElement(void *content);
+LinkedList *CreateElement(void *content);
+
 void AddBack(LinkedList **list, LinkedList *element);
-void RemoveElements(LinkedList **list, t_bool (*equal)(const void*, const void*), const void *sample);
+
+void RemoveElements(LinkedList **list, t_bool (*equal)(const void *, const void *), const void *sample);
+
 //void RemoveElements(LinkedList **list, t_bool (*equal)(void*, void*), void *sample);
 size_t GetSize(const LinkedList *list);
 
