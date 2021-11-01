@@ -30,15 +30,18 @@ void AddBack(LinkedList **list, LinkedList *element) {
     temp->m_Next = element;
 }
 
-void RemoveElements(LinkedList **list, t_bool (*func)(void *content)) {
+void RemoveElements(LinkedList **list, t_bool (*equal)(const void *, const void *), const void *sample) {
     LinkedList *previous;
     LinkedList *current;
 
     previous = NULL;
     current = *list;
     while (current) {
-        if (!func(current->m_Content))
+        if (!equal(current->m_Content, sample)) {
+            previous = current;
+            current = current->m_Next;
             continue;
+        }
         if (previous) {
             previous->m_Next = current->m_Next;
             free(current);

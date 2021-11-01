@@ -9,12 +9,13 @@
 
 typedef struct S_LinkedList {
     void *m_Content;
-    S_LinkedList* m_Next;
+    struct S_LinkedList* m_Next;
 } LinkedList;
 
 LinkedList* CreateElement(void *content);
 void AddBack(LinkedList **list, LinkedList *element);
-void RemoveElements(LinkedList **list, t_bool (*func)(void *content));
+void RemoveElements(LinkedList **list, t_bool (*equal)(const void*, const void*), const void *sample);
+//void RemoveElements(LinkedList **list, t_bool (*equal)(void*, void*), void *sample);
 size_t GetSize(const LinkedList *list);
 
 #endif //TESTER_LINKEDLIST_H
