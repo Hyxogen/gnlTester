@@ -40,7 +40,7 @@ void free_tracked(void *pointer) {
 	free(pointer);
 }
 
-t_bool HasLeaks() {
+int HasLeaks() {
 	return (GetSize(g_Allocated));
 }
 
