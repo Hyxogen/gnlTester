@@ -10,34 +10,45 @@
 #                                                                              #
 # **************************************************************************** #
 
-NAME			:= gnlTester
+NAME				:= gnlTester
 
-OBJ_FOLDER		:= obj/
-GNL_FOLDER		:= ../
+OBJ_DIR				:= ./obj
+SRC_DIR				:= ./src
+INC_DIR				:= ./include
 
-TESTER_SRC		:= src/tester.c src/checker.c
-GNL_SRC			:= ../get_next_line.c ../get_next_line_utils.c
+SRCS				:= $(SRC_DIR)/tester.c $(SRC_DIR)/checker.c $(SRC_DIR)/test_utils.c
+OBJS				:= $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+DEPENDENCIES		:= $(INC_DIR)/tester.h
 
-TESTER_OBJ		:= $(patsubst %.c,$(OBJ_FOLDER)/%.o,$(notdir $(TESTER_SRC)))
-GNL_OBJ			:= $(patsubst %.c,$(OBJ_FOLDER)/%.o,$(notdir $(GNL_SRC)))
+GNL_DIR				:= ..
+GNL_SRCS			:= $(GNL_DIR)/get_next_line.c $(GNL_DIR)/get_next_line_utils.c
+GNL_DEPENDENCIES	:= $(GNL_DIR)/get_next_line.h
+GNL_OBJS			:= $(GNL_SRCS:$(GNL_DIR)/%.c=$(OBJ_DIR)/%.o)
 
-DEPENDENCIES	:= ./include/tester.h ../get_next_line.h
-TESTER_OBJ		:= $(TESTER_SRC:.c=.o)
-GNL_OBJ			:= $(GNL_SRC:.c=.o)
-CFLAGS			:= -Wall -Wextra -Werror
-CC				:= gcc $(CFLAGS)
-LD				:= gcc
+#TESTER_OBJ			:= $(TESTER_SRC:.c=.o)
+#GNL_OBJ				:= $(GNL_SRC:.c=.o)
+CFLAGS				:= -Wall -Wextra -Werror
+CC					:= gcc $(CFLAGS)
+LD					:= gcc
 
 all: $(NAME)
 
-$(NAME): $(DEPENDENCIES) $(TESTER_OBJ) $(GNL_OBJ)
-	$(LD) $(TESTER_OBJ) $(GNL_OBJ) -o $(NAME)
+test: all
+	./$(NAME) ./tests/simple
 
-$(OBJ_FOLDER)/%.o: %.c
+$(NAME): $(DEPENDENCIES) $(OBJS) $(GNL_DEPENDENCIES) $(GNL_OBJS)
+	$(LD) $(OBJS) $(GNL_OBJS) -o $(NAME)
+
+$(OBJS): $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	$(CC) -c $< -o $@
+
+$(GNL_OBJS): $(OBJ_DIR)/%.o: $(GNL_DIR)/%.c
 	$(CC) -c $< -o $@
 
 clean:
-	rm -f $(TESTER_OBJ) $(GNL_OBJ)
+	rm -f $(OBJS) $(GNL_OBJS)
 
 fclean: clean
 	rm -f $(NAME)
+
+re: fclean all
