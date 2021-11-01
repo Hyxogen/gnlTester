@@ -64,3 +64,13 @@ size_t GetSize(const LinkedList *list) {
 	}
 	return (size);
 }
+
+void ClearList(LinkedList **list) {
+	LinkedList *tmp;
+
+	while (*list) {
+		tmp = (*list)->m_Next;
+		free(*list);
+		*list = tmp;
+	}
+}

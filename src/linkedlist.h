@@ -21,4 +21,5 @@ void RemoveElements(LinkedList **list, t_bool (*equal)(const void *, const void 
 //void RemoveElements(LinkedList **list, t_bool (*equal)(void*, void*), void *sample);
 size_t GetSize(const LinkedList *list);
 
+void ClearList(LinkedList **list);
 #endif //TESTER_LINKEDLIST_H
