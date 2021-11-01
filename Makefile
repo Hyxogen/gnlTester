@@ -16,7 +16,7 @@ OBJ_DIR				:= ./obj
 SRC_DIR				:= ./src
 INC_DIR				:= ./include
 
-SRCS				:= $(SRC_DIR)/GNLTester.c $(SRC_DIR)/Checker.c $(SRC_DIR)/TestUtils.c $(SRC_DIR)/MemUtils.c $(SRC_DIR)/LinkedList.c
+SRCS				:= $(SRC_DIR)/GNLTester.c $(SRC_DIR)/TestUtils.c $(SRC_DIR)/MemUtils.c $(SRC_DIR)/LinkedList.c
 OBJS				:= $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 DEPENDENCIES		:= $(INC_DIR)/tester.h
 
@@ -29,7 +29,7 @@ MEMORY_CHECK		:= -fsanitize=address
 CFLAGS				:= -Wall -Wextra -Werror $(MEMORY_CHECK)
 CC					:= gcc $(CFLAGS)
 LD					:= gcc $(MEMORY_CHECK)
-
+#TODO fix BUF_SIZE 1
 BUF_SIZE			:= 128
 
 all: $(NAME)
