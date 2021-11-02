@@ -41,7 +41,6 @@ static t_bool CheckNormal(int fd, const char *corrNextStr) {
 	t_bool equal;
 
 	testNextStr = get_next_line(fd);
-	printf("Expected:%s got:%s\n", corrNextStr, testNextStr);
 	if (corrNextStr == NULL)
 		return (testNextStr == NULL);
 	if (!testNextStr) {
@@ -49,7 +48,13 @@ static t_bool CheckNormal(int fd, const char *corrNextStr) {
 		return (FALSE);
 	}
 	equal = !strcmp(testNextStr, corrNextStr); //CRASH HERE
+	if (!equal)
+		printf("Expected:\"%s\"\nGot:\"%s\"\n", corrNextStr, testNextStr);
 	FreeTracked(testNextStr);
+	if (HasLeaks()) {
+		printf("Leaks!\n");
+		return (FALSE);
+	}
 	return (equal);
 }
 
