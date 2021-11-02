@@ -11,6 +11,7 @@
 #include "Assert.h"
 #include "MemUtils.h"
 #include "ReadUtils.h"
+#include "Logger.h"
 
 static t_bool FileForEachLine(FILE *stream, int fd, t_bool (*check)(int, const char *)) {
 	char *corr_str;
@@ -42,18 +43,22 @@ static t_bool CheckNormal(int fd, const char *corrNextStr) {
 	t_bool equal;
 
 	testNextStr = get_next_line(fd);
-	if (corrNextStr == NULL)
-		return (testNextStr == NULL);
+	if (corrNextStr == NULL) {
+		if (!testNextStr)
+			return (TRUE);
+		LogF("Expected end of file. Got:\n\"%s\"\n", testNextStr);
+		return (FALSE);
+	}
 	if (!testNextStr) {
-		printf("Unexpected EOF!\n");
+		LogF("Unexpected end of file. Expected:\n\"%s\"\n", corrNextStr);
 		return (FALSE);
 	}
 	equal = !strcmp(testNextStr, corrNextStr); //CRASH HERE
 	if (!equal)
-		printf("Expected:\"%s\"\nGot:\"%s\"\n", corrNextStr, testNextStr);
+		LogF("Expected:\"%s\"\nGot:\"%s\"\n", corrNextStr, testNextStr);
 	FreeTracked(testNextStr);
 	if (HasLeaks()) {
-		printf("Leaks!\n");
+		LogF("Found a leak!\n");
 		return (FALSE);
 	}
 	return (equal);
@@ -121,13 +126,16 @@ static t_bool RunTests(const char *file, t_bool (*check)(int, const char *)) {
 }
 
 t_bool TestFileNormal(const char *file) {
+	LogF("Starting normal tests for file \"%s\"\n", file);
 	return (RunTests(file, &CheckNormal));
 }
 
 t_bool TestFileMallocFail(const char *file) {
+	LogF("Starting tests with malloc fails for file \"%s\"\n", file);
 	return (RunTests(file, &CheckMallocFail));
 }
 
 t_bool TestFileReadFail(const char *file) {
+	LogF("Starting tests with read fails for file \"%s\"\n", file);
 	return (RunTests(file, &CheckReadFail));
 }

@@ -17,7 +17,7 @@ SRC_DIR				:= ./src
 INC_DIR				:= ./include
 
 SRCS				:= $(SRC_DIR)/GNLTester.c $(SRC_DIR)/TestUtils.c $(SRC_DIR)/MemUtils.c $(SRC_DIR)/LinkedList.c \
-						$(SRC_DIR)/ReadUtils.c
+						$(SRC_DIR)/ReadUtils.c $(SRC_DIR)/Logger.c
 OBJS				:= $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 DEPENDENCIES		:= $(INC_DIR)/tester.h
 
@@ -26,17 +26,18 @@ GNL_SRCS			:= $(GNL_DIR)/get_next_line.c $(GNL_DIR)/get_next_line_utils.c
 GNL_DEPENDENCIES	:= $(GNL_DIR)/get_next_line.h
 GNL_OBJS			:= $(GNL_SRCS:$(GNL_DIR)/%.c=$(OBJ_DIR)/%.o)
 
+LOGGING				:= -DTESTER_LOG
 MEMORY_CHECK		:= -fsanitize=address
-CFLAGS				:= -Wall -Wextra -Werror $(MEMORY_CHECK)
+CFLAGS				:= -Wall -Wextra -Werror $(MEMORY_CHECK) $(LOGGING)
 CC					:= gcc $(CFLAGS)
 LD					:= gcc $(MEMORY_CHECK)
 
-BUF_SIZE			:= 128
+BUF_SIZE			:= 10000000
 
 all: $(NAME)
 
 test: re
-	./$(NAME) ./tests/simple
+	./$(NAME) ./tests/giantline
 
 $(NAME): $(DEPENDENCIES) $(OBJS) $(GNL_DEPENDENCIES) $(GNL_OBJS)
 	$(LD) $(OBJS) $(GNL_OBJS) -o $(NAME) -D BUFFER_SIZE=$(BUF_SIZE)

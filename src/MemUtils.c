@@ -6,7 +6,7 @@
 #include "LinkedList.h"
 #include "Assert.h"
 #include <stdlib.h>
-
+#include "Logger.h"
 
 static LinkedList *g_Allocated = NULL;
 static int g_MallocFail = -1;
@@ -38,6 +38,7 @@ int HasLeaks() {
 }
 
 void ClearLeakCheck() {
+	LogF("Clearing leak check\n");
 	ClearList(&g_Allocated);
 }
 
