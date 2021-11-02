@@ -22,6 +22,9 @@
 
 /*
  * No arguments will run tests for invalid fd
+ *
+ * TODO Make tests for read failures by overwriting it
+ * TODO Make benchmark tests (and timeouts)
  */
 int main(int argc, char **argv) {
 	int ret;
@@ -39,6 +42,7 @@ int main(int argc, char **argv) {
 		if (!TestFileFail(argv[1]))
 			ret |= 0b0000100;
 		//TODO check for memory leaks if malloc fails in between
+//		printf("End:%d\n", ret);
 		if (!ret)
 			printf("Passed tests!\n");
 		else
