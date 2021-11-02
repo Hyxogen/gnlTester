@@ -9,6 +9,7 @@
 
 t_bool TestFileNormal(const char *file);
 
-t_bool TestFileFail(const char *file);
+t_bool TestFileMallocFail(const char *file);
 
+t_bool TestFileReadFail(const char *file);
 #endif //GNLTESTER_TEST_UTILS_H

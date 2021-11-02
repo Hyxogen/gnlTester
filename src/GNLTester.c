@@ -23,7 +23,6 @@
 /*
  * No arguments will run tests for invalid fd
  *
- * TODO Make tests for read failures by overwriting it
  * TODO Make benchmark tests (and timeouts)
  * TODO Make logging system
  */
@@ -32,7 +31,7 @@ int main(int argc, char **argv) {
 
 	ret = 0;
 	if (argc > 2) {
-		printf("Incorrect arguments. Usage: ./gnlTster [file]\n");
+		printf("Incorrect arguments. Usage: ./gnlTester [file]\n");
 		return (-1);
 	} else if (argc == 2) {
 		ClearLeakCheck();
@@ -41,8 +40,11 @@ int main(int argc, char **argv) {
 		if (HasLeaks())
 			ret |= 0b0000010;
 		ClearLeakCheck();
-		if (!TestFileFail(argv[1]))
+		if (!TestFileMallocFail(argv[1]))
 			ret |= 0b0000100;
+		ClearLeakCheck();
+		if (!TestFileReadFail(argv[1]))
+			ret |= 0b0001000;
 		if (!ret)
 			printf("Passed tests!\n");
 		else

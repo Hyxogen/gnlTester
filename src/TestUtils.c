@@ -10,6 +10,7 @@
 #include <unistd.h>
 #include "Assert.h"
 #include "MemUtils.h"
+#include "ReadUtils.h"
 
 static t_bool FileForEachLine(FILE *stream, int fd, t_bool (*check)(int, const char *)) {
 	char *corr_str;
@@ -66,7 +67,7 @@ static t_bool CheckNormal(int fd, const char *corrNextStr) {
  * @param corrNextStr
  * @return TRUE if check passed
  */
-static t_bool CheckFail(int fd, const char *corrNextStr) {
+static t_bool CheckMallocFail(int fd, const char *corrNextStr) {
 	char *testNextStr;
 
 	SetMallocFaiL(1);
@@ -78,30 +79,55 @@ static t_bool CheckFail(int fd, const char *corrNextStr) {
 	return (!HasLeaks());
 }
 
-t_bool TestFileNormal(const char *file) {
+/**
+ * Checks if the next call of get_next_line with a read failure
+ * has no leaks, and if the return value is correct
+ *
+ * @param fd
+ * @param corrNextStr
+ * @return TRUE if check passed
+ */
+static t_bool CheckReadFail(int fd, const char *corrNextStr) {
+	char *testNextStr;
+
+	SetReadFail(0);
+	testNextStr = get_next_line(fd);
+	if (corrNextStr)
+		;
+	if (testNextStr != NULL) {
+		printf("Expected null!\n");
+		printf("Got:\"%s\"\n", testNextStr);
+		return (FALSE);
+	}
+	if (HasLeaks())
+		printf("Has leaks!\n");
+	return (!HasLeaks());
+}
+
+static t_bool RunTests(const char *file, t_bool (*check)(int, const char *)) {
 	int test_fd;
 	FILE *stream;
 	t_bool ret;
 
+	SetReadFail(-1);
+	SetMallocFaiL(-1);
 	test_fd = open(file, O_RDONLY);
 	stream = fopen(file, "r");
 	ASSERT((test_fd != -1) && (stream != NULL));
-	ret = FileForEachLine(stream, test_fd, &CheckNormal);
+	ret = FileForEachLine(stream, test_fd, check);
 	fclose(stream);
 	close(test_fd);
 	return (ret);
 }
 
-t_bool TestFileFail(const char *file) {
-	int test_fd;
-	FILE *stream;
-	t_bool ret;
+t_bool TestFileNormal(const char *file) {
+	return (RunTests(file, &CheckNormal));
+}
 
-	test_fd = open(file, O_RDONLY);
-	stream = fopen(file, "r");
-	ASSERT((test_fd != -1) && (stream != NULL));
-	ret = FileForEachLine(stream, test_fd, &CheckFail);
-	fclose(stream);
-	close(test_fd);
-	return (ret);
+t_bool TestFileMallocFail(const char *file) {
+	return (RunTests(file, &CheckMallocFail));
+}
+
+t_bool TestFileReadFail(const char *file) {
+	return (RunTests(file, &CheckReadFail));
 }

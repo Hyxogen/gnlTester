@@ -14,9 +14,10 @@ static int g_MallocFail = -1;
 void *MallocTracked(size_t size) {
 	void *ret;
 	LinkedList *element;
-	if (!g_MallocFail)
+	if (!g_MallocFail) {
+		g_MallocFail--;
 		return (NULL);
-	else if (g_MallocFail > 0)
+	} else if (g_MallocFail > 0)
 		g_MallocFail--;
 	ret = malloc(size);
 	if (!ret)
