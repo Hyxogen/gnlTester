@@ -11,7 +11,6 @@
 static LinkedList *g_Allocated = NULL;
 static int g_MallocFail = -1;
 
-//TODO rename these functions to something like malloc_tracked
 void *MallocTracked(size_t size) {
 	void *ret;
 	LinkedList *element;
@@ -29,7 +28,7 @@ void *MallocTracked(size_t size) {
 }
 
 void FreeTracked(void *pointer) {
-	RemoveElements(&g_Allocated, &BlockEqual, pointer);
+	RemoveElements(&g_Allocated, &PointerEqual, pointer);
 	free(pointer);
 }
 
@@ -41,7 +40,7 @@ void ClearLeakCheck() {
 	ClearList(&g_Allocated);
 }
 
-t_bool BlockEqual(const void *blk1, const void *blk2) {
+t_bool PointerEqual(const void *blk1, const void *blk2) {
 	const unsigned char *ptr1, *ptr2;
 
 	ptr1 = blk1;
