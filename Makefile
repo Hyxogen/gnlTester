@@ -17,7 +17,7 @@ SRC_DIR				:= ./src
 INC_DIR				:= ./include
 
 SRCS				:= $(SRC_DIR)/GNLTester.c $(SRC_DIR)/TestUtils.c $(SRC_DIR)/MemUtils.c $(SRC_DIR)/LinkedList.c \
-						$(SRC_DIR)/ReadUtils.c $(SRC_DIR)/Logger.c
+						$(SRC_DIR)/ReadUtils.c $(SRC_DIR)/Logger.c $(SRC_DIR)/ProfilingUtils.c
 OBJS				:= $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 DEPENDENCIES		:= $(INC_DIR)/tester.h
 
@@ -27,6 +27,7 @@ GNL_DEPENDENCIES	:= $(GNL_DIR)/get_next_line.h
 GNL_OBJS			:= $(GNL_SRCS:$(GNL_DIR)/%.c=$(OBJ_DIR)/%.o)
 
 LOGGING				:= -DTESTER_LOG
+PROFILER_FLAGS		:= -finstrument-functions
 MEMORY_CHECK		:= -fsanitize=address
 CFLAGS				:= -Wall -Wextra -Werror $(MEMORY_CHECK) $(LOGGING)
 CC					:= gcc $(CFLAGS)
@@ -46,7 +47,7 @@ $(OBJS): $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) -c $< -o $@ -D BUFFER_SIZE=$(BUF_SIZE)
 
 $(GNL_OBJS): $(OBJ_DIR)/%.o: $(GNL_DIR)/%.c
-	$(CC) -c $< -o $@ -DBUFFER_SIZE=$(BUF_SIZE) -D'malloc(x)=MallocTracked(x)' -D'free(x)=FreeTracked(x)'
+	$(CC) $(PROFILER_FLAGS) -c $< -o $@ -DBUFFER_SIZE=$(BUF_SIZE) -D'malloc(x)=MallocTracked(x)' -D'free(x)=FreeTracked(x)'
 
 clean:
 	rm -f $(OBJS) $(GNL_OBJS)
