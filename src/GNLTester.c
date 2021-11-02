@@ -35,6 +35,7 @@ int main(int argc, char **argv) {
 		printf("Incorrect arguments. Usage: ./gnlTster [file]\n");
 		return (-1);
 	} else if (argc == 2) {
+		ClearLeakCheck();
 		if (!TestFileNormal(argv[1]))
 			ret |= 0b0000001;
 		if (HasLeaks())
