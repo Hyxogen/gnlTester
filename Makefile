@@ -27,18 +27,19 @@ GNL_DEPENDENCIES	:= $(GNL_DIR)/get_next_line.h
 GNL_OBJS			:= $(GNL_SRCS:$(GNL_DIR)/%.c=$(OBJ_DIR)/%.o)
 
 LOGGING				:= -DTESTER_LOG
-PROFILER_FLAGS		:= -finstrument-functions
+#-finstrument-functions
+PROFILER_FLAGS		:=
 MEMORY_CHECK		:= -fsanitize=address
-CFLAGS				:= -Wall -Wextra -Werror $(MEMORY_CHECK) $(LOGGING)
+CFLAGS				:= -Wall -Wextra -Werror -g $(MEMORY_CHECK) $(LOGGING)
 CC					:= gcc $(CFLAGS)
 LD					:= gcc $(MEMORY_CHECK)
 
-BUF_SIZE			:= 10000000
+BUF_SIZE			:= 128
 
 all: $(NAME)
 
 test: re
-	./$(NAME) ./tests/giantline
+	./$(NAME) ./tests/lorumipsum
 
 $(NAME): $(DEPENDENCIES) $(OBJS) $(GNL_DEPENDENCIES) $(GNL_OBJS)
 	$(LD) $(OBJS) $(GNL_OBJS) -o $(NAME) -D BUFFER_SIZE=$(BUF_SIZE)
