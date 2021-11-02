@@ -25,6 +25,7 @@
  *
  * TODO Make tests for read failures by overwriting it
  * TODO Make benchmark tests (and timeouts)
+ * TODO Make logging system
  */
 int main(int argc, char **argv) {
 	int ret;
@@ -41,8 +42,6 @@ int main(int argc, char **argv) {
 		ClearLeakCheck();
 		if (!TestFileFail(argv[1]))
 			ret |= 0b0000100;
-		//TODO check for memory leaks if malloc fails in between
-//		printf("End:%d\n", ret);
 		if (!ret)
 			printf("Passed tests!\n");
 		else
