@@ -6,7 +6,7 @@
 #include <dlfcn.h>
 #include "Logger.h"
 
-void __cyg_profile_func_enter (void *this_fn, void *call_site) {
+void __cyg_profile_func_enter(void *this_fn, void *call_site) {
 	Dl_info info;
 	Dl_info extra_info;
 
@@ -17,6 +17,6 @@ void __cyg_profile_func_enter (void *this_fn, void *call_site) {
 	LogF("__cyg_profile_func_enter this_fn:%p call_site:%p\n", this_fn, call_site);
 }
 
-void __cyg_profile_func_exit  (void *this_fn, void *call_site) {
+void __cyg_profile_func_exit(void *this_fn, void *call_site) {
 	LogF("__cyg_profile_func_exit this_fn:%p call_site:%p\n", this_fn, call_site);
 }
