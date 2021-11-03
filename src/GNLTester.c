@@ -43,17 +43,17 @@ int main(int argc, char **argv) {
 		ClearLeakCheck();
 		if (!TestFileNormal(argv[1]))
 			ret |= 0b0000001;
-		LogF("Completed normal tests\n");
+		LogF("Completed normal tests\n\n");
 		if (HasLeaks())
 			ret |= 0b0000010;
 		ClearLeakCheck();
 		if (!TestFileMallocFail(argv[1]))
 			ret |= 0b0000100;
-		LogF("Completed tests with malloc fails\n");
+		LogF("Completed tests with malloc fails\n\n");
 		ClearLeakCheck();
 		if (!TestFileReadFail(argv[1]))
 			ret |= 0b0001000;
-		LogF("Completed tests with read fails\n");
+		LogF("Completed tests with read fails\n\n");
 		LogF("Starting profiler\n");
 		StartProfiler();
 		TestFileNormal(argv[1]);

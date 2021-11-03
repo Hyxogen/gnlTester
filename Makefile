@@ -34,12 +34,12 @@ CFLAGS				:= -Wall -Wextra -Werror -g $(MEMORY_CHECK) $(LOGGING)
 CC					:= gcc $(CFLAGS)
 LD					:= gcc $(MEMORY_CHECK)
 
-BUF_SIZE			:= 999999
+BUF_SIZE			:= 99
 
 all: $(NAME)
 
 test: re
-	./$(NAME) ./tests/notsoomanylines
+	./$(NAME) ./tests/simple
 
 $(NAME): $(DEPENDENCIES) $(OBJS) $(GNL_DEPENDENCIES) $(GNL_OBJS)
 	$(LD) $(OBJS) $(GNL_OBJS) -o $(NAME) -D BUFFER_SIZE=$(BUF_SIZE)

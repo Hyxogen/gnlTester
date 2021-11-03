@@ -58,7 +58,8 @@ static t_bool CheckNormal(int fd, const char *corrNextStr) {
 		LogF("Expected:\"%s\"\nGot:\"%s\"\n", corrNextStr, testNextStr);
 	FreeTracked(testNextStr);
 	if (HasLeaks()) {
-		LogF("Found a leak!\n");
+		LogF("Found leaks!\n");
+		LogMemDump();
 		return (FALSE);
 	}
 	return (equal);
@@ -100,8 +101,8 @@ static t_bool CheckReadFail(int fd, const char *corrNextStr) {
 	if (corrNextStr)
 		;
 	if (testNextStr != NULL) {
-		printf("Expected null!\n");
-		printf("Got:\"%s\"\n", testNextStr);
+		LogF("Expected null!\n");
+		LogF("Got:\"%s\"\n", testNextStr);
 		return (FALSE);
 	}
 	if (HasLeaks())

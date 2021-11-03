@@ -17,6 +17,10 @@ void *MallocTracked(size_t size);
 
 void FreeTracked(void *pointer);
 
+void LogPointer(const void *pointer);
+
+void LogMemDump();
+
 void ClearLeakCheck();
 
 int HasLeaks();
