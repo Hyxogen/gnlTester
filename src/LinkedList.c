@@ -5,6 +5,7 @@
 #include "LinkedList.h"
 #include <stdlib.h>
 #include "../include/tester.h"
+#include "Logger.h"
 
 LinkedList *CreateElement(void *content) {
 	LinkedList *ret;
@@ -15,6 +16,15 @@ LinkedList *CreateElement(void *content) {
 	ret->m_Content = content;
 	ret->m_Next = NULL;
 	return (ret);
+}
+
+LinkedList *FindFirst(LinkedList *list, t_bool (*equal)(const void *, const void *), const void *sample) {
+	while (list) {
+		if (equal(list->m_Content, sample))
+			return (list);
+		list = list->m_Next;
+	}
+	return (NULL);
 }
 
 void AddBack(LinkedList **list, LinkedList *element) {
@@ -72,5 +82,23 @@ void ClearList(LinkedList **list) {
 		tmp = (*list)->m_Next;
 		free(*list);
 		*list = tmp;
+	}
+}
+
+void ClearListWithElements(LinkedList **list, void (*clear)(void *)) {
+	LinkedList *tmp;
+
+	while (*list) {
+		tmp = (*list)->m_Next;
+		clear((*list)->m_Content);
+		free(*list);
+		*list = tmp;
+	}
+}
+
+void ForEachElement(LinkedList *list, void (*func)(const void *)) {
+	while (list) {
+		func(list->m_Content);
+		list = list->m_Next;
 	}
 }

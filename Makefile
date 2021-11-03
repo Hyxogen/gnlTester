@@ -28,18 +28,18 @@ GNL_OBJS			:= $(GNL_SRCS:$(GNL_DIR)/%.c=$(OBJ_DIR)/%.o)
 
 LOGGING				:= -DTESTER_LOG
 #-finstrument-functions
-PROFILER_FLAGS		:=
+PROFILER_FLAGS		:= -finstrument-functions
 MEMORY_CHECK		:= -fsanitize=address
 CFLAGS				:= -Wall -Wextra -Werror -g $(MEMORY_CHECK) $(LOGGING)
 CC					:= gcc $(CFLAGS)
 LD					:= gcc $(MEMORY_CHECK)
 
-BUF_SIZE			:= 128
+BUF_SIZE			:= 999999
 
 all: $(NAME)
 
 test: re
-	./$(NAME) ./tests/lorumipsum
+	./$(NAME) ./tests/notsoomanylines
 
 $(NAME): $(DEPENDENCIES) $(OBJS) $(GNL_DEPENDENCIES) $(GNL_OBJS)
 	$(LD) $(OBJS) $(GNL_OBJS) -o $(NAME) -D BUFFER_SIZE=$(BUF_SIZE)

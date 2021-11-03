@@ -19,6 +19,7 @@
 #include "TestUtils.h"
 #include "MemUtils.h"
 #include "Logger.h"
+#include "ProfilingUtils.h"
 
 
 /*
@@ -53,6 +54,12 @@ int main(int argc, char **argv) {
 		if (!TestFileReadFail(argv[1]))
 			ret |= 0b0001000;
 		LogF("Completed tests with read fails\n");
+		LogF("Starting profiler\n");
+		StartProfiler();
+		TestFileNormal(argv[1]);
+		StopProfiler();
+		LogF("Completed profiling. Dumping data\n");
+		LogProfileData();
 		if (!ret)
 			printf("Passed tests!\n");
 		else
