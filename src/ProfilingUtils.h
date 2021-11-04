@@ -18,7 +18,8 @@ typedef struct S_FuncInfo {
 void StartProfiler();
 void StopProfiler();
 void LogProfileData();
-//TODO create seperate function for clearing profiling data
+void ClearProfilerData();
+
 /**
  *
  * @param funcInfo Exptects valid FuncInfo

@@ -45,7 +45,7 @@ $(NAME): $(DEPENDENCIES) $(OBJS) $(GNL_DEPENDENCIES) $(GNL_OBJS)
 	$(LD) $(OBJS) $(GNL_OBJS) -o $(NAME) -D BUFFER_SIZE=$(BUF_SIZE)
 
 $(OBJS): $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
-	$(CC) -c $< -o $@ -D BUFFER_SIZE=$(BUF_SIZE)
+	$(CC) -c $< -o $@ -D BUFFER_SIZE=$(BUF_SIZE) -DTESTER_ASSERT_ENABLE
 
 $(GNL_OBJS): $(OBJ_DIR)/%.o: $(GNL_DIR)/%.c
 	$(CC) $(PROFILER_FLAGS) -c $< -o $@ -DBUFFER_SIZE=$(BUF_SIZE) -D'malloc(x)=MallocTracked(x)' -D'free(x)=FreeTracked(x)'

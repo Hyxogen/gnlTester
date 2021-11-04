@@ -24,14 +24,12 @@ static FuncInfo *CreateFuncInfo(void *function) {
 }
 
 void StartProfiler() {
+	LogF("Starting profiler\n");
 	g_ProfileOn = TRUE;
-	if (!g_Profiler) {
-		ClearListWithElements(&g_Profiler, &FreeFuncInfo);
-		g_Profiler = 0;
-	}
 }
 
 void StopProfiler() {
+	LogF("Stopping profiler\n");
 	g_ProfileOn = FALSE;
 }
 
@@ -50,6 +48,12 @@ void LogFuncInfo(const void *funcInfoPtr) {
 	LogF("Total time busy: %f seconds\n", funcInfo->m_Busy);
 	LogF("Average time busy: %f seconds/call\n", funcInfo->m_Busy / funcInfo->m_CallCount);
 	LogF("------------------------------------------------\n", funcInfo->m_Func, info.dli_sname);
+}
+
+void ClearProfilerData() {
+	LogF("Clearing profiling data\n");
+	ClearListWithElements(&g_Profiler, &FreeFuncInfo);
+	g_Profiler = 0;
 }
 
 void __cyg_profile_func_enter(void *this_fn, void *call_site) {
@@ -74,28 +78,20 @@ void __cyg_profile_func_enter(void *this_fn, void *call_site) {
 	funcInfo->m_Start = now;
 	funcInfo->m_CallCount += 1;
 	dladdr(this_fn, &info);
-//	LogF("Call:%p(%s)\n", this_fn, info.dli_sname);
 }
 
 void __cyg_profile_func_exit(void *this_fn, void *call_site) {
 	LinkedList *funcElement;
 	FuncInfo *funcInfo;
 	clock_t now;
-//	Dl_info info;
 
 	now = clock();
 	call_site = NULL;
 	if (!g_ProfileOn)
 		return;
 	funcElement = FindFirst(g_Profiler, &FuncInfoEqual, this_fn);
-//	if (!funcElement) {
-//		dladdr(this_fn, &info);
-//		LogF("Did not find entry for:%p(%s)\n", this_fn, info.dli_sname);
-//		return;
-//	}
 	funcInfo = funcElement->m_Content;
 	funcInfo->m_Busy += (now - funcInfo->m_Start)/(double)CLOCKS_PER_SEC;
-//	LogF("__cyg_profile_func_exit this_fn:%p call_site:%p\n", this_fn, call_site);
 }
 
 t_bool FuncInfoEqual(const void *funcInfo, const void *function) {

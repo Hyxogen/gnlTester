@@ -26,7 +26,7 @@
  * No arguments will run tests for invalid fd
  *
  * TODO Make benchmark tests (and timeouts)
- * TODO Make logging system
+ * TODO Add capability to check who called malloc (for checking for leaks)
  */
 int main(int argc, char **argv) {
 	int ret;
@@ -56,6 +56,7 @@ int main(int argc, char **argv) {
 		LogF("Completed tests with read fails\n\n");
 		LogF("Starting profiler\n");
 		StartProfiler();
+		ClearProfilerData();
 		TestFileNormal(argv[1]);
 		StopProfiler();
 		LogF("Completed profiling. Dumping data\n");
