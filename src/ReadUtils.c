@@ -27,7 +27,7 @@ ssize_t ReadSafe(int fildes, void *buf, size_t nbyte) {
 }
 
 void SetReadFail(int n) {
-	LogF("Setting read to fail in %d\n", n);
+//	LogF("Setting read to fail in %d\n", n);
 	g_ReadFail = n;
 }
 
