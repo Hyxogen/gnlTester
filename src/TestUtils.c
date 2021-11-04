@@ -76,7 +76,7 @@ static t_bool CheckNormal(int fd, const char *corrNextStr) {
 static t_bool CheckMallocFail(int fd, const char *corrNextStr) {
 	char *testNextStr;
 
-	SetMallocFaiL(1);
+	SetMallocFaiL(0);
 	testNextStr = get_next_line(fd);
 	if (corrNextStr)
 		;
@@ -105,9 +105,12 @@ static t_bool CheckReadFail(int fd, const char *corrNextStr) {
 		LogF("Got:\"%s\"\n", testNextStr);
 		return (FALSE);
 	}
-	if (HasLeaks())
-		printf("Has leaks!\n");
-	return (!HasLeaks());
+	if (HasLeaks()) {
+		LogF("Found leak!\n");
+		LogMemDump();
+		return (FALSE);
+	}
+	return (TRUE);
 }
 
 static t_bool RunTests(const char *file, t_bool (*check)(int, const char *)) {

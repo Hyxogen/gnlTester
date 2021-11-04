@@ -26,6 +26,8 @@ GNL_SRCS			:= $(GNL_DIR)/get_next_line.c $(GNL_DIR)/get_next_line_utils.c
 GNL_DEPENDENCIES	:= $(GNL_DIR)/get_next_line.h
 GNL_OBJS			:= $(GNL_SRCS:$(GNL_DIR)/%.c=$(OBJ_DIR)/%.o)
 
+TEST_FILES			:= $(notdir $(wildcard tests/*.txt))
+
 LOGGING				:= -DTESTER_LOG
 #-finstrument-functions
 PROFILER_FLAGS		:= -finstrument-functions
@@ -34,7 +36,7 @@ CFLAGS				:= -Wall -Wextra -Werror -g $(MEMORY_CHECK) $(LOGGING)
 CC					:= gcc $(CFLAGS)
 LD					:= gcc $(MEMORY_CHECK)
 
-BUF_SIZE			:= 99
+BUF_SIZE			:= 1
 
 all: $(NAME)
 
@@ -49,6 +51,9 @@ $(OBJS): $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 
 $(GNL_OBJS): $(OBJ_DIR)/%.o: $(GNL_DIR)/%.c
 	$(CC) $(PROFILER_FLAGS) -c $< -o $@ -DBUFFER_SIZE=$(BUF_SIZE) -D'malloc(x)=MallocTracked(x)' -D'free(x)=FreeTracked(x)'
+
+$(TEST_FILES): %.txt: $(NAME)
+	@./$(NAME) ./tests/$@
 
 clean:
 	rm -f $(OBJS) $(GNL_OBJS)

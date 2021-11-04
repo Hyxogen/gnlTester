@@ -46,11 +46,11 @@ int main(int argc, char **argv) {
 		LogF("Completed normal tests\n\n");
 		ClearLeakCheck();
 		if (!TestFileMallocFail(argv[1]))
-			ret |= 0b0000100;
+			ret |= 0b0000010;
 		LogF("Completed tests with malloc fails\n\n");
 		ClearLeakCheck();
 		if (!TestFileReadFail(argv[1]))
-			ret |= 0b0001000;
+			ret |= 0b0000100;
 		LogF("Completed tests with read fails\n\n");
 		StartProfiler();
 		ClearProfilerData();
@@ -58,10 +58,10 @@ int main(int argc, char **argv) {
 		StopProfiler();
 		LogF("Completed profiling. Dumping data\n");
 		LogProfileData();
-		if (!ret)
-			printf("Passed tests!\n");
-		else
-			printf("Failed tests!\n");
+//		if (!ret)
+//			printf("Passed tests!\n");
+//		else
+//			printf("Failed tests!\n");
 		LogF("------Completed all tests------");
 		LogStop();
 		return (ret);
