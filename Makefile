@@ -37,7 +37,7 @@ GNL_CFLAGS			:= -Wall -Wextra -Werror
 CC					:= gcc
 LD					:= gcc $(MEMORY_CHECK)
 
-BUF_SIZE			:= 1
+#BUF_SIZE			:= 99999
 
 all: $(NAME)
 

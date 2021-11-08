@@ -120,34 +120,68 @@ done
 SetColor "$YELLOW"
 printf "Done with all the tests!\n"
 
-#SetColor "$YELLOW"
-#printf "Testing speed of get_next_line using gnlTester!\n"
-#echo -n > profiling
-#for bfs in "${BUFFER_SIZES[@]}"
-#do
-#  make fclean >> /dev/null
-#  BUF_SIZE="$bfs"
-#  export BUF_SIZE
-#  make profiler >> /dev/null
-##   shellcheck disable=SC2068
-#  for file in ${TEST_FILES[@]}
-#  do
-#    SetColor "$WHITE"
-#    printf $file
-#    printf " (%d) " "$BUF_SIZE"
-##    make $file
-#    eval "./gnlTester tests/${file}"
-#    RETVAL=$?
-#    if [ $RETVAL -ne 0 ];
-#    then
-#      SetColor "$LIGHT_RED"
-#      printf "KO %d\n" "$RETVAL"
-#    else
-#      SetColor "$LIGHT_GREEN"
-#      printf "OK\n"
-#    fi
-#    cat deepthought >> profiling
-#  done
-#done
-#SetColor "$YELLOW"
-#printf "Done with all the tests!\n"
+#SetColor "$LIGHT_RED"
+#printf "Testing bonus!\n"
+#printf "Static count: "
+#grep "static.*;" "*_bonus.c" | wc -l | td -d ' '
+#printf "\n"
+
+SetColor "$LIGHT_RED"
+printf "Testing bonus!\n"
+SetColor "$LIGHT_BLUE"
+printf "Static count: "
+grep "static.*;" *_bonus.c | wc -l | tr -d ' '
+SetColor "$YELLOW"
+printf "Starting bonus tests using gnlTester!\n"
+for bfs in "${BUFFER_SIZES[@]}"
+do
+  make fclean >> /dev/null
+  BUF_SIZE="$bfs"
+  export BUF_SIZE
+  make mandatory >> /dev/null
+  SetColor "$WHITE"
+  printf "BUFFER_SIZE:%d " "$BUF_SIZE"
+  eval "./gnlTester tests/${file}"
+  RETVAL=$?
+  if [ $RETVAL -ne 0 ];
+  then
+    SetColor "$LIGHT_RED"
+    printf "KO %d\n" "$RETVAL"
+   else
+    SetColor "$LIGHT_GREEN"
+    printf "OK\n"
+  fi
+  cat deepthought >> deeperthought
+done
+
+SetColor "$YELLOW"
+printf "Testing speed of get_next_line using gnlTester!\n"
+echo -n > profiling
+for bfs in "${BUFFER_SIZES[@]}"
+do
+  make fclean >> /dev/null
+  BUF_SIZE="$bfs"
+  export BUF_SIZE
+  make profiler >> /dev/null
+#   shellcheck disable=SC2068
+  for file in ${TEST_FILES[@]}
+  do
+    SetColor "$WHITE"
+    printf $file
+    printf " (%d) " "$BUF_SIZE"
+#    make $file
+    eval "./gnlTester tests/${file}"
+    RETVAL=$?
+    if [ $RETVAL -ne 0 ];
+    then
+      SetColor "$LIGHT_RED"
+      printf "KO %d\n" "$RETVAL"
+    else
+      SetColor "$LIGHT_GREEN"
+      printf "OK\n"
+    fi
+    cat deepthought >> profiling
+  done
+done
+SetColor "$YELLOW"
+printf "Done with all the tests!\n"

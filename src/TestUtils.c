@@ -165,7 +165,6 @@ static t_bool RunBonusTests(int file_count, char **files, t_bool (*check)(int, c
 	corr_str = NULL;
 	while (file_count) {
 		AddBack(&fileList, CreateElement(CreateTestFile(*files)));
-		LogF("Adding fd:%d\n", ((TestFile *)GetLastElement(fileList)->m_Content)->m_FileDescriptor);
 		files++;
 		file_count--;
 	}

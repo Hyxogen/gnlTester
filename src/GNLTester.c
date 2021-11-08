@@ -38,10 +38,7 @@ int main(int argc, char **argv) {
 		ClearLeakCheck();
 		if (!TestFilesBonus(argc - 1, argv + 1))
 			ret |= 0b0001000;
-//		LogF("Received incorrect number of arguments!\n");
-//		printf("Incorrect arguments. Usage: ./gnlTester [file]\n");
-//		LogStop();
-//		return (ret);
+		LogF("Completed bonus tests!\n");
 	} else if (argc == 2) {
 #ifdef TEST_MANDATORY
 #ifdef TESTER_PROFILER_ENABLE
@@ -69,8 +66,6 @@ int main(int argc, char **argv) {
 			ret |= 0b0000100;
 		LogF("Completed tests with read fails\n\n");
 #endif
-//		LogStop();
-//		return (ret);
 	}
 	LogStop();
 	LogF("------Completed all tests------\n");
