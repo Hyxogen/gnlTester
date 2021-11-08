@@ -40,24 +40,38 @@ int main(int argc, char **argv) {
 		LogStop();
 		return (-1);
 	} else if (argc == 2) {
+#ifdef TEST_MANDATORY
+#ifdef TESTER_PROFILER_ENABLE
+		StartProfiler();
+		ClearProfiler();
+#endif
 		ClearLeakCheck();
 		if (!TestFileNormal(argv[1]))
 			ret |= 0b0000001;
 		LogF("Completed normal tests\n\n");
+		#ifdef TESTER_PROFILER_ENABLE
+		StopProfiler();
+		LogProfileData();
+#endif
+#endif
+#ifdef TEST_MALLOC_FAIL
 		ClearLeakCheck();
 		if (!TestFileMallocFail(argv[1]))
 			ret |= 0b0000010;
 		LogF("Completed tests with malloc fails\n\n");
+#endif
+#ifdef TEST_READ_FAIL
 		ClearLeakCheck();
 		if (!TestFileReadFail(argv[1]))
 			ret |= 0b0000100;
 		LogF("Completed tests with read fails\n\n");
-		StartProfiler();
-		ClearProfilerData();
-		TestFileNormal(argv[1]);
-		StopProfiler();
-		LogF("Completed profiling. Dumping data\n");
-		LogProfileData();
+#endif
+//		StartProfiler();
+//		ClearProfilerData();
+//		TestFileNormal(argv[1]);
+//		StopProfiler();
+//		LogF("Completed profiling. Dumping data\n");
+//		LogProfileData();
 //		if (!ret)
 //			printf("Passed tests!\n");
 //		else

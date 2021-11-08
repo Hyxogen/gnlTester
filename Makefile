@@ -32,13 +32,29 @@ LOGGING				:= -DTESTER_LOG
 #-finstrument-functions
 PROFILER_FLAGS		:= -finstrument-functions
 MEMORY_CHECK		:= -fsanitize=address
-CFLAGS				:= -Wall -Wextra -Werror -g $(MEMORY_CHECK) $(LOGGING)
-CC					:= gcc $(CFLAGS)
+#GLOBAL_CFLAGS		:= $(MEMORY_CHECK)
+GNL_CFLAGS			:= -Wall -Wextra -Werror
+CC					:= gcc
 LD					:= gcc $(MEMORY_CHECK)
 
-BUF_SIZE			:= 1
+#BUF_SIZE			:= 1
 
 all: $(NAME)
+
+debug: GLOBAL_CFLAGS += -g $(MEMORY_CHECK) $(LOGGING)
+debug: $(NAME)
+
+profiler: GLOBAL_CFLAGS += -DTESTER_PROFILER_ENABLE
+profiler: $(NAME)
+
+mandatory: GLOBAL_CFLAGS += $(MEMORY_CHECK) $(LOGGING) -DTEST_MANDATORY
+mandatory: $(NAME)
+
+memfail: GLOBAL_CFLAGS += $(MEMORY_CHECK) -DTEST_MALLOC_FAIL $(LOGGING)
+memfail: $(NAME)
+
+readfail: GLOBAL_CFLAGS += $(MEMORY_CHECK) -DTEST_REAF_FAIL $(LOGGING)
+readfail: $(NAME)
 
 test: re
 	./$(NAME) ./tests/simple
@@ -47,10 +63,10 @@ $(NAME): $(DEPENDENCIES) $(OBJS) $(GNL_DEPENDENCIES) $(GNL_OBJS)
 	$(LD) $(OBJS) $(GNL_OBJS) -o $(NAME) -D BUFFER_SIZE=$(BUF_SIZE)
 
 $(OBJS): $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
-	$(CC) -c $< -o $@ -D BUFFER_SIZE=$(BUF_SIZE) -DTESTER_ASSERT_ENABLE
+	$(CC) $(GLOBAL_CFLAGS) -c $< -o $@ -D BUFFER_SIZE=$(BUF_SIZE) -DTESTER_ASSERT_ENABLE
 
 $(GNL_OBJS): $(OBJ_DIR)/%.o: $(GNL_DIR)/%.c
-	$(CC) $(PROFILER_FLAGS) -c $< -o $@ -DBUFFER_SIZE=$(BUF_SIZE) -D'malloc(x)=MallocTracked(x)' -D'free(x)=FreeTracked(x)'
+	$(CC) $(GNL_CFLAGS) $(GLOBAL_CFLAGS) -c $< -o $@ -DBUFFER_SIZE=$(BUF_SIZE) -D'malloc(x)=MallocTracked(x)' -D'free(x)=FreeTracked(x)'
 
 $(TEST_FILES): %.txt: $(NAME)
 	@./$(NAME) ./tests/$@

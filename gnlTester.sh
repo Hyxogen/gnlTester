@@ -37,7 +37,7 @@ do
   make fclean >> /dev/null
   BUF_SIZE="$bfs"
   export BUF_SIZE
-  make >> /dev/null
+  make mandatory >> /dev/null
 #   shellcheck disable=SC2068
   for file in ${TEST_FILES[@]}
   do
