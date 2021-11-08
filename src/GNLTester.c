@@ -35,10 +35,13 @@ int main(int argc, char **argv) {
 	LogF("------Starting tests for BUFFER_SIZE:%d argc:%d, argv[1]:\"%s\"------\n", BUFFER_SIZE, argc, argv[1]);
 	ret = 0;
 	if (argc > 2) {
-		LogF("Received incorrect number of arguments!\n");
-		printf("Incorrect arguments. Usage: ./gnlTester [file]\n");
-		LogStop();
-		return (-1);
+		ClearLeakCheck();
+		if (!TestFilesBonus(argc - 1, argv + 1))
+			ret |= 0b0001000;
+//		LogF("Received incorrect number of arguments!\n");
+//		printf("Incorrect arguments. Usage: ./gnlTester [file]\n");
+//		LogStop();
+//		return (ret);
 	} else if (argc == 2) {
 #ifdef TEST_MANDATORY
 #ifdef TESTER_PROFILER_ENABLE
@@ -66,10 +69,10 @@ int main(int argc, char **argv) {
 			ret |= 0b0000100;
 		LogF("Completed tests with read fails\n\n");
 #endif
-		LogF("------Completed all tests------\n");
-		LogStop();
-		return (ret);
+//		LogStop();
+//		return (ret);
 	}
 	LogStop();
+	LogF("------Completed all tests------\n");
 	return (ret);
 }

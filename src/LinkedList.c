@@ -18,6 +18,15 @@ LinkedList *CreateElement(void *content) {
 	return (ret);
 }
 
+LinkedList *GetLastElement(LinkedList *linkedList) {
+	LinkedList *ret;
+
+	ret = NULL;
+	while (linkedList->m_Next)
+		linkedList = linkedList->m_Next;
+	return (linkedList);
+}
+
 LinkedList *FindFirst(LinkedList *list, t_bool (*equal)(const void *, const void *), const void *sample) {
 	while (list) {
 		if (equal(list->m_Content, sample))

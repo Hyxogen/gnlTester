@@ -21,8 +21,8 @@ LIGHT_CYAN="\033[1;36m"
 WHITE="\033[1;37m"
 
 #Buffer sizes
-#BUFFER_SIZES=(1 2 3 8 41 42 43 128 99999 100000)
-BUFFER_SIZES=(99999 100000)
+BUFFER_SIZES=(1 2 3 8 41 42 43 128 99999 100000)
+#BUFFER_SIZES=(99999 100000)
 
 SetColor() {
   printf "$1"
@@ -120,34 +120,34 @@ done
 SetColor "$YELLOW"
 printf "Done with all the tests!\n"
 
-SetColor "$YELLOW"
-printf "Testing speed of get_next_line using gnlTester!\n"
-echo -n > profiling
-for bfs in "${BUFFER_SIZES[@]}"
-do
-  make fclean >> /dev/null
-  BUF_SIZE="$bfs"
-  export BUF_SIZE
-  make profiler >> /dev/null
-#   shellcheck disable=SC2068
-  for file in ${TEST_FILES[@]}
-  do
-    SetColor "$WHITE"
-    printf $file
-    printf " (%d) " "$BUF_SIZE"
-#    make $file
-    eval "./gnlTester tests/${file}"
-    RETVAL=$?
-    if [ $RETVAL -ne 0 ];
-    then
-      SetColor "$LIGHT_RED"
-      printf "KO %d\n" "$RETVAL"
-    else
-      SetColor "$LIGHT_GREEN"
-      printf "OK\n"
-    fi
-    cat deepthought >> profiling
-  done
-done
-SetColor "$YELLOW"
-printf "Done with all the tests!\n"
+#SetColor "$YELLOW"
+#printf "Testing speed of get_next_line using gnlTester!\n"
+#echo -n > profiling
+#for bfs in "${BUFFER_SIZES[@]}"
+#do
+#  make fclean >> /dev/null
+#  BUF_SIZE="$bfs"
+#  export BUF_SIZE
+#  make profiler >> /dev/null
+##   shellcheck disable=SC2068
+#  for file in ${TEST_FILES[@]}
+#  do
+#    SetColor "$WHITE"
+#    printf $file
+#    printf " (%d) " "$BUF_SIZE"
+##    make $file
+#    eval "./gnlTester tests/${file}"
+#    RETVAL=$?
+#    if [ $RETVAL -ne 0 ];
+#    then
+#      SetColor "$LIGHT_RED"
+#      printf "KO %d\n" "$RETVAL"
+#    else
+#      SetColor "$LIGHT_GREEN"
+#      printf "OK\n"
+#    fi
+#    cat deepthought >> profiling
+#  done
+#done
+#SetColor "$YELLOW"
+#printf "Done with all the tests!\n"

@@ -14,6 +14,8 @@ typedef struct S_LinkedList {
 
 LinkedList *CreateElement(void *content);
 
+LinkedList *GetLastElement(LinkedList *linkedList);
+
 LinkedList *FindFirst(LinkedList *list, t_bool (*equal)(const void *, const void *), const void *sample);
 
 void AddBack(LinkedList **list, LinkedList *element);

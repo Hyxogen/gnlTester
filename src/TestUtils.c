@@ -12,6 +12,7 @@
 #include "MemUtils.h"
 #include "ReadUtils.h"
 #include "Logger.h"
+#include "LinkedList.h"
 
 static t_bool FileForEachLine(FILE *stream, int fd, t_bool (*check)(int, const char *)) {
 	char *corr_str;
@@ -127,6 +128,69 @@ static t_bool RunTests(const char *file, t_bool (*check)(int, const char *)) {
 	fclose(stream);
 	close(test_fd);
 	return (ret);
+}
+
+TestFile *CreateTestFile(const char *file) {
+	TestFile *ret;
+
+	ret = malloc(sizeof(TestFile));
+	ret->m_FileDescriptor = open(file, O_RDONLY);
+	ASSERT(ret->m_FileDescriptor >= 0);
+	ret->m_Stream = fopen(file, "r");
+	ASSERT(ret->m_Stream);
+	ret->m_FileName = file;
+	return (ret);
+}
+
+void DeleteTestFile(void *testFilePointer) {
+	TestFile *testFile;
+
+	testFile = testFilePointer;
+	fclose(testFile->m_Stream);
+	close(testFile->m_FileDescriptor);
+	free(testFile);
+}
+
+static t_bool RunBonusTests(int file_count, char **files, t_bool (*check)(int, const char *)) {
+	static LinkedList *fileList = NULL;
+	LinkedList *current;
+	TestFile *testFile;
+	int should_return;
+	char *corr_str;
+	ssize_t func_ret;
+	size_t line_size;
+
+	should_return = file_count;
+	corr_str = NULL;
+	while (file_count) {
+		AddBack(&fileList, CreateElement(CreateTestFile(*files)));
+		LogF("Adding fd:%d\n", ((TestFile *)GetLastElement(fileList)->m_Content)->m_FileDescriptor);
+		files++;
+		file_count--;
+	}
+
+	GetLastElement(fileList)->m_Next = fileList;
+	current = fileList;
+	while (file_count < should_return) {
+		testFile = current->m_Content;
+		func_ret = getline(&corr_str, &line_size, testFile->m_Stream);
+		if (!check(testFile->m_FileDescriptor, corr_str)) {
+			LogF("Failed at bonus file:\"%s\"\n", testFile->m_FileName);
+			return (FALSE);
+		}
+		if (func_ret == -1)
+			file_count++;
+		else
+			file_count = 0;
+		current = current->m_Next;
+	}
+	ClearListWithElements(&fileList, &DeleteTestFile);
+	return (TRUE);
+}
+
+t_bool TestFilesBonus(int file_count, char **files) {
+	LogF("Starting bonus tests for files\n");
+	return (RunBonusTests(file_count, files, &CheckNormal));
 }
 
 t_bool TestFileNormal(const char *file) {
