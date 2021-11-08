@@ -32,7 +32,7 @@ LOGGING				:= -DTESTER_LOG
 #-finstrument-functions
 PROFILER_FLAGS		:= -DTESTER_PROFILER_ENABLE -DTEST_MANDATORY $(LOGGING)
 MEMORY_CHECK		:= -fsanitize=address
-#GLOBAL_CFLAGS		:= $(MEMORY_CHECK)
+GLOBAL_CFLAGS		:= $(MEMORY_CHECK)
 GNL_CFLAGS			:= -Wall -Wextra -Werror
 CC					:= gcc
 LD					:= gcc $(MEMORY_CHECK)
