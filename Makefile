@@ -41,7 +41,7 @@ BUF_SIZE			:= 1
 
 all: $(NAME)
 
-debug: GLOBAL_CFLAGS += -g $(MEMORY_CHECK) $(LOGGING)
+debug: GLOBAL_CFLAGS += -g $(MEMORY_CHECK) $(LOGGING) -DTEST_MANDATORY
 debug: $(NAME)
 
 profiler: GLOBAL_CFLAGS += $(PROFILER_FLAGS)

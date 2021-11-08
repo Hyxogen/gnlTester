@@ -154,6 +154,7 @@ void DeleteTestFile(void *testFilePointer) {
 static t_bool RunBonusTests(int file_count, char **files, t_bool (*check)(int, const char *)) {
 	static LinkedList *fileList = NULL;
 	LinkedList *current;
+	LinkedList *last;
 	TestFile *testFile;
 	int should_return;
 	char *corr_str;
@@ -169,14 +170,18 @@ static t_bool RunBonusTests(int file_count, char **files, t_bool (*check)(int, c
 		file_count--;
 	}
 
-	GetLastElement(fileList)->m_Next = fileList;
+	last = GetLastElement(fileList);
+	last->m_Next = fileList;
 	current = fileList;
 	while (file_count < should_return) {
 		testFile = current->m_Content;
 		func_ret = getline(&corr_str, &line_size, testFile->m_Stream);
-		if (!check(testFile->m_FileDescriptor, corr_str)) {
-			LogF("Failed at bonus file:\"%s\"\n", testFile->m_FileName);
-			return (FALSE);
+		if (func_ret == -1) {
+			if (!check(testFile->m_FileDescriptor, NULL))
+				return (FALSE);
+		} else {
+			if (!check(testFile->m_FileDescriptor, corr_str))
+				return (FALSE);
 		}
 		if (func_ret == -1)
 			file_count++;
@@ -184,6 +189,7 @@ static t_bool RunBonusTests(int file_count, char **files, t_bool (*check)(int, c
 			file_count = 0;
 		current = current->m_Next;
 	}
+	last->m_Next = NULL;
 	ClearListWithElements(&fileList, &DeleteTestFile);
 	return (TRUE);
 }
