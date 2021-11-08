@@ -30,7 +30,7 @@ TEST_FILES			:= $(notdir $(wildcard tests/*.txt))
 
 LOGGING				:= -DTESTER_LOG
 #-finstrument-functions
-PROFILER_FLAGS		:= -finstrument-functions
+PROFILER_FLAGS		:= -DTESTER_PROFILER_ENABLE -DTEST_MANDATORY $(LOGGING)
 MEMORY_CHECK		:= -fsanitize=address
 #GLOBAL_CFLAGS		:= $(MEMORY_CHECK)
 GNL_CFLAGS			:= -Wall -Wextra -Werror
@@ -44,7 +44,8 @@ all: $(NAME)
 debug: GLOBAL_CFLAGS += -g $(MEMORY_CHECK) $(LOGGING)
 debug: $(NAME)
 
-profiler: GLOBAL_CFLAGS += -DTESTER_PROFILER_ENABLE
+profiler: GLOBAL_CFLAGS += $(PROFILER_FLAGS)
+profiler: GNL_CFLAGS += -finstrument-functions
 profiler: $(NAME)
 
 mandatory: GLOBAL_CFLAGS += $(MEMORY_CHECK) $(LOGGING) -DTEST_MANDATORY
@@ -53,7 +54,7 @@ mandatory: $(NAME)
 memfail: GLOBAL_CFLAGS += $(MEMORY_CHECK) -DTEST_MALLOC_FAIL $(LOGGING)
 memfail: $(NAME)
 
-readfail: GLOBAL_CFLAGS += $(MEMORY_CHECK) -DTEST_REAF_FAIL $(LOGGING)
+readfail: GLOBAL_CFLAGS += $(MEMORY_CHECK) -DTEST_READ_FAIL $(LOGGING)
 readfail: $(NAME)
 
 test: re

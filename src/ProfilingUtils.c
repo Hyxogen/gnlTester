@@ -34,6 +34,7 @@ void StopProfiler() {
 }
 
 void LogProfileData() {
+	LogF("Dumping profiling data\n");
 	ForEachElement(g_Profiler, &LogFuncInfo);
 }
 

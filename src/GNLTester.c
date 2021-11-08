@@ -43,7 +43,7 @@ int main(int argc, char **argv) {
 #ifdef TEST_MANDATORY
 #ifdef TESTER_PROFILER_ENABLE
 		StartProfiler();
-		ClearProfiler();
+		ClearProfilerData();
 #endif
 		ClearLeakCheck();
 		if (!TestFileNormal(argv[1]))
@@ -66,17 +66,7 @@ int main(int argc, char **argv) {
 			ret |= 0b0000100;
 		LogF("Completed tests with read fails\n\n");
 #endif
-//		StartProfiler();
-//		ClearProfilerData();
-//		TestFileNormal(argv[1]);
-//		StopProfiler();
-//		LogF("Completed profiling. Dumping data\n");
-//		LogProfileData();
-//		if (!ret)
-//			printf("Passed tests!\n");
-//		else
-//			printf("Failed tests!\n");
-		LogF("------Completed all tests------");
+		LogF("------Completed all tests------\n");
 		LogStop();
 		return (ret);
 	}
