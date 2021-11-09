@@ -21,7 +21,7 @@ SRCS					:= $(SRC_DIR)/GNLTester.c $(SRC_DIR)/TestUtils.c $(SRC_DIR)/MemUtils.c 
 OBJS					:= $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 DEPENDENCIES			:= $(INC_DIR)/tester.h
 
-#GNL_DIR					:= ..
+GNL_DIR					:= ..
 GNL_SRCS				:= $(GNL_DIR)/get_next_line.c $(GNL_DIR)/get_next_line_utils.c
 GNL_BONUS_SRCS			:= $(GNL_DIR)/get_next_line_bonus.c $(GNL_DIR)/get_next_line_utils_bonus.c
 GNL_DEPENDENCIES		:= $(GNL_DIR)/get_next_line.h
@@ -41,7 +41,7 @@ GNL_CFLAGS				:= -Wall -Wextra -Werror
 CC						:= cc
 LD						:= cc $(MEMORY_CHECK)
 
-#BUF_SIZE				:= 1
+BUF_SIZE				:= 3
 
 all: $(NAME)
 
@@ -64,8 +64,8 @@ memfail: $(NAME)
 readfail: GLOBAL_CFLAGS += $(MEMORY_CHECK) -DTEST_READ_FAIL $(LOGGING)
 readfail: $(NAME)
 
-test: re
-	./$(NAME) ./tests/simple
+test: fclean debug
+	./$(NAME) ./tests/43_with_nl
 
 $(NAME): $(DEPENDENCIES) $(OBJS) $(GNL_DEPENDENCIES) $(GNL_OBJS)
 	$(LD) $(OBJS) $(GNL_OBJS) -o $(NAME) -D BUFFER_SIZE=$(BUF_SIZE)
