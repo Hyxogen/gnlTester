@@ -5,6 +5,7 @@
 #include "ReadUtils.h"
 #include <unistd.h>
 #include <dlfcn.h>
+#include "Logger.h"
 
 static int g_ReadFail = -1;
 static size_t g_LastReadSize;
@@ -26,6 +27,7 @@ ssize_t ReadSafe(int fildes, void *buf, size_t nbyte) {
 }
 
 void SetReadFail(int n) {
+//	LogF("Setting read to fail in %d\n", n);
 	g_ReadFail = n;
 }
 

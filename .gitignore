@@ -100,3 +100,6 @@ obj/
 *.o
 *.out
 gnlTester
+deepthought
+deeperthought
+profiling

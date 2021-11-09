@@ -1,0 +1,9 @@
+gnlTester
+-Mandatory tests for normal files etc.
+
+gnlBreaker
+- Attempts to break your gnl by causing malloc failures and read failures
+- Attempts to break your gnl by passing invalid file descriptors etc.
+
+gnlProfiler
+- Tests the speed of your gnl and gives detailed information about it

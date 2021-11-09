@@ -7,5 +7,9 @@
 
 #include <signal.h>
 
-#define ASSERT(x) if (!x) { raise(SIGTRAP); } else { }
+#ifdef TESTER_ASSERT_ENABLE
+#define ASSERT(x) if (!(x)) { raise(SIGTRAP); } else { }
+#else
+#define ASSERT(x)
+#endif
 #endif //TESTER_ASSERT_H
