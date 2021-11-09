@@ -20,6 +20,9 @@ LIGHT_PURPLE="\033[1;35m"
 LIGHT_CYAN="\033[1;36m"
 WHITE="\033[1;37m"
 
+GNL_DIR=".."
+export GNL_DIR
+
 #Buffer sizes
 BUFFER_SIZES=(1 2 3 8 41 42 43 128 99999 100000)
 #BUFFER_SIZES=(99999 100000)
@@ -28,10 +31,17 @@ SetColor() {
   printf "$1"
 }
 
+
 SetColor "$YELLOW"
 printf "Starting normal tests using gnlTester!\n"
 echo -n > deeperthought
-TEST_FILES=$(ls -P ./tests | grep -v "/")
+TEST_FILES_INT=$(ls -P ./tests | grep -v "/")
+TEST_FILES=""
+for file in ${TEST_FILES_INT[@]}
+do
+  TEST_FILES="$TEST_FILES tests/$file"
+done
+#echo ${TEST_FILES}
 
 for bfs in "${BUFFER_SIZES[@]}"
 do
@@ -46,7 +56,7 @@ do
     printf $file
     printf " (%d) " "$BUF_SIZE"
 #    make $file
-    eval "./gnlTester tests/${file}"
+    eval "./gnlTester ${file}"
     RETVAL=$?
     if [ $RETVAL -ne 0 ];
     then
@@ -75,7 +85,7 @@ do
     printf $file
     printf " (%d) " "$BUF_SIZE"
 #    make $file
-    eval "./gnlTester tests/${file}"
+    eval "./gnlTester ${file}"
     RETVAL=$?
     if [ $RETVAL -ne 0 ];
     then
@@ -104,7 +114,7 @@ do
     printf $file
     printf " (%d) " "$BUF_SIZE"
 #    make $file
-    eval "./gnlTester tests/${file}"
+    eval "./gnlTester ${file}"
     RETVAL=$?
     if [ $RETVAL -ne 0 ];
     then
@@ -120,17 +130,17 @@ done
 SetColor "$YELLOW"
 printf "Done with all the tests!\n"
 
-#SetColor "$LIGHT_RED"
+#SetColor "$LIGHT_GREEN"
 #printf "Testing bonus!\n"
 #printf "Static count: "
 #grep "static.*;" "*_bonus.c" | wc -l | td -d ' '
 #printf "\n"
 
-SetColor "$LIGHT_RED"
+SetColor "$LIGHT_CYAN"
 printf "Testing bonus!\n"
 SetColor "$LIGHT_BLUE"
 printf "Static count: "
-grep "static.*;" *_bonus.c | wc -l | tr -d ' '
+grep "static.*;" ${GNL_DIR}/*_bonus.c | wc -l | tr -d ' '
 SetColor "$YELLOW"
 printf "Starting bonus tests using gnlTester!\n"
 for bfs in "${BUFFER_SIZES[@]}"
@@ -138,10 +148,10 @@ do
   make fclean >> /dev/null
   BUF_SIZE="$bfs"
   export BUF_SIZE
-  make mandatory >> /dev/null
   SetColor "$WHITE"
   printf "BUFFER_SIZE:%d " "$BUF_SIZE"
-  eval "./gnlTester tests/${file}"
+  make bonus >> /dev/null
+  eval "./gnlTester ${TEST_FILES[@]}"
   RETVAL=$?
   if [ $RETVAL -ne 0 ];
   then
@@ -170,7 +180,7 @@ do
     printf $file
     printf " (%d) " "$BUF_SIZE"
 #    make $file
-    eval "./gnlTester tests/${file}"
+    eval "./gnlTester ${file}"
     RETVAL=$?
     if [ $RETVAL -ne 0 ];
     then

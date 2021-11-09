@@ -10,34 +10,38 @@
 #                                                                              #
 # **************************************************************************** #
 
-NAME				:= gnlTester
+NAME					:= gnlTester
 
-OBJ_DIR				:= ./obj
-SRC_DIR				:= ./src
-INC_DIR				:= ./include
+OBJ_DIR					:= ./obj
+SRC_DIR					:= ./src
+INC_DIR					:= ./include
 
-SRCS				:= $(SRC_DIR)/GNLTester.c $(SRC_DIR)/TestUtils.c $(SRC_DIR)/MemUtils.c $(SRC_DIR)/LinkedList.c \
-						$(SRC_DIR)/ReadUtils.c $(SRC_DIR)/Logger.c $(SRC_DIR)/ProfilingUtils.c
-OBJS				:= $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
-DEPENDENCIES		:= $(INC_DIR)/tester.h
+SRCS					:= $(SRC_DIR)/GNLTester.c $(SRC_DIR)/TestUtils.c $(SRC_DIR)/MemUtils.c $(SRC_DIR)/LinkedList.c \
+							$(SRC_DIR)/ReadUtils.c $(SRC_DIR)/Logger.c $(SRC_DIR)/ProfilingUtils.c
+OBJS					:= $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+DEPENDENCIES			:= $(INC_DIR)/tester.h
 
-GNL_DIR				:= ..
-GNL_SRCS			:= $(GNL_DIR)/get_next_line.c $(GNL_DIR)/get_next_line_utils.c
-GNL_DEPENDENCIES	:= $(GNL_DIR)/get_next_line.h
-GNL_OBJS			:= $(GNL_SRCS:$(GNL_DIR)/%.c=$(OBJ_DIR)/%.o)
+#GNL_DIR					:= ..
+GNL_SRCS				:= $(GNL_DIR)/get_next_line.c $(GNL_DIR)/get_next_line_utils.c
+GNL_BONUS_SRCS			:= $(GNL_DIR)/get_next_line_bonus.c $(GNL_DIR)/get_next_line_utils_bonus.c
+GNL_DEPENDENCIES		:= $(GNL_DIR)/get_next_line.h
+GNL_BONUS_DEPENDENCIES	:= $(GNL_DIR)/get_next_line_bonus.h
+GNL_OBJS				:= $(GNL_SRCS:$(GNL_DIR)/%.c=$(OBJ_DIR)/%.o)
+GNL_BONUS_OBJS			:= $(GNL_BONUS_SRCS:$(GNL_DIR)/%.c=$(OBJ_DIR)/%.o)
 
-TEST_FILES			:= $(notdir $(wildcard tests/*.txt))
+TEST_FILES				:= $(notdir $(wildcard tests/*.txt))
 
-LOGGING				:= -DTESTER_LOG
+LOGGING					:= -DTESTER_LOG
 #-finstrument-functions
-PROFILER_FLAGS		:= -DTESTER_PROFILER_ENABLE -DTEST_MANDATORY $(LOGGING)
-MEMORY_CHECK		:= -fsanitize=address
-GLOBAL_CFLAGS		:= $(MEMORY_CHECK)
-GNL_CFLAGS			:= -Wall -Wextra -Werror
-CC					:= gcc
-LD					:= gcc $(MEMORY_CHECK)
+PROFILER_FLAGS			:= -DTESTER_PROFILER_ENABLE -DTEST_MANDATORY $(LOGGING)
+MEMORY_CHECK			:= -fsanitize=address
+#-O3 testen
+GLOBAL_CFLAGS			:= $(MEMORY_CHECK) -Ofast
+GNL_CFLAGS				:= -Wall -Wextra -Werror
+CC						:= cc
+LD						:= cc $(MEMORY_CHECK)
 
-#BUF_SIZE			:= 99999
+#BUF_SIZE				:= 1
 
 all: $(NAME)
 
@@ -51,6 +55,9 @@ profiler: $(NAME)
 mandatory: GLOBAL_CFLAGS += $(MEMORY_CHECK) $(LOGGING) -DTEST_MANDATORY
 mandatory: $(NAME)
 
+bonus: GLOBAL_CFLAGS += $(MEMORY_CHECK) $(LOGGING) -DTEST_MANDATORY
+bonus: $(NAME)
+
 memfail: GLOBAL_CFLAGS += $(MEMORY_CHECK) -DTEST_MALLOC_FAIL $(LOGGING)
 memfail: $(NAME)
 
@@ -63,17 +70,23 @@ test: re
 $(NAME): $(DEPENDENCIES) $(OBJS) $(GNL_DEPENDENCIES) $(GNL_OBJS)
 	$(LD) $(OBJS) $(GNL_OBJS) -o $(NAME) -D BUFFER_SIZE=$(BUF_SIZE)
 
+$(NAME_BONUS): $(DEPENDENCIES) $(OBJS) $(GNL_DEPENDENCIES) $(GNL_BONUS_OBJS)
+	$(LD) $(OBJS) $(GNL_BONUS_OBJS) -o $(NAME) -D BUFFER_SIZE=$(BUF_SIZE)
+
 $(OBJS): $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) $(GLOBAL_CFLAGS) -c $< -o $@ -D BUFFER_SIZE=$(BUF_SIZE) -DTESTER_ASSERT_ENABLE
 
 $(GNL_OBJS): $(OBJ_DIR)/%.o: $(GNL_DIR)/%.c
 	$(CC) $(GNL_CFLAGS) $(GLOBAL_CFLAGS) -c $< -o $@ -DBUFFER_SIZE=$(BUF_SIZE) -D'malloc(x)=MallocTracked(x)' -D'free(x)=FreeTracked(x)'
 
+$(GNL_BONUS_OBJS): $(OBJ_DIR)/%.o: $(GNL_DIR)/%.c
+	$(CC) $(GNL_CFLAGS) $(GLOBAL_CFLAGS) -c $< -o $@ -DBUFFER_SIZE=$(BUF_SIZE) -D'malloc(x)=MallocTracked(x)' -D'free(x)=FreeTracked(x)'
+
 $(TEST_FILES): %.txt: $(NAME)
 	@./$(NAME) ./tests/$@
 
 clean:
-	rm -f $(OBJS) $(GNL_OBJS)
+	rm -f $(OBJS) $(GNL_OBJS) $(GNL_BONUS_OBJS)
 
 fclean: clean
 	rm -f $(NAME)

@@ -175,13 +175,10 @@ static t_bool RunBonusTests(int file_count, char **files, t_bool (*check)(int, c
 	while (file_count < should_return) {
 		testFile = current->m_Content;
 		func_ret = getline(&corr_str, &line_size, testFile->m_Stream);
-		if (func_ret == -1) {
-			if (!check(testFile->m_FileDescriptor, NULL))
-				return (FALSE);
-		} else {
-			if (!check(testFile->m_FileDescriptor, corr_str))
-				return (FALSE);
-		}
+		if ((func_ret == -1) && (!check(testFile->m_FileDescriptor, NULL)))
+			return (FALSE);
+		else if ((func_ret != -1) && (!check(testFile->m_FileDescriptor, corr_str)))
+			return (FALSE);
 		if (func_ret == -1)
 			file_count++;
 		else

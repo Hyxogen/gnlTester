@@ -27,6 +27,7 @@
  *
  * TODO Make benchmark tests (and timeouts)
  * TODO Add capability to check who called malloc (for checking for leaks)
+ * TODO fix bonus checks
  */
 int main(int argc, char **argv) {
 	int ret;
