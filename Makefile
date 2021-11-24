@@ -74,12 +74,15 @@ $(NAME_BONUS): $(DEPENDENCIES) $(OBJS) $(GNL_DEPENDENCIES) $(GNL_BONUS_OBJS)
 	$(LD) $(OBJS) $(GNL_BONUS_OBJS) -o $(NAME) -D BUFFER_SIZE=$(BUF_SIZE)
 
 $(OBJS): $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	mkdir -p obj
 	$(CC) $(GLOBAL_CFLAGS) -c $< -o $@ -D BUFFER_SIZE=$(BUF_SIZE) -DTESTER_ASSERT_ENABLE
 
 $(GNL_OBJS): $(OBJ_DIR)/%.o: $(GNL_DIR)/%.c
+	mkdir -p obj
 	$(CC) $(GNL_CFLAGS) $(GLOBAL_CFLAGS) -c $< -o $@ -DBUFFER_SIZE=$(BUF_SIZE) -D'malloc(x)=MallocTracked(x)' -D'free(x)=FreeTracked(x)'
 
 $(GNL_BONUS_OBJS): $(OBJ_DIR)/%.o: $(GNL_DIR)/%.c
+	mkdir -p obj
 	$(CC) $(GNL_CFLAGS) $(GLOBAL_CFLAGS) -c $< -o $@ -DBUFFER_SIZE=$(BUF_SIZE) -D'malloc(x)=MallocTracked(x)' -D'free(x)=FreeTracked(x)'
 
 $(TEST_FILES): %.txt: $(NAME)

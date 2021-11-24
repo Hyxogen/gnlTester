@@ -6,6 +6,7 @@
 #define GNLTESTER_TEST_UTILS_H
 
 #include "../include/tester.h"
+#include <stdio.h>
 
 typedef struct S_TestFile {
 	int m_FileDescriptor;
